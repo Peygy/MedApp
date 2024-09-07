@@ -13,7 +13,7 @@ func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
 	eng.Engine.Use(cors.Default())
 	routeGroup1 := eng.Engine.Group("/graphql")
 	{
-		routeGroup1.POST("/register", graphqlHandler(grpcPull.Services))
+		routeGroup1.POST("/signup", graphqlHandler(grpcPull.Services))
 	}
 }
 

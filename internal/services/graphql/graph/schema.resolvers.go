@@ -9,17 +9,16 @@ import (
 	"fmt"
 	"sort"
 
-	pbAuth "github.com/peygy/medapp/internal/pkg/protos/graph_auth"
-	pbToken "github.com/peygy/medapp/internal/pkg/protos/graph_token"
+	pb "github.com/peygy/medapp/internal/pkg/protos/graph_auth"
 	"github.com/peygy/medapp/internal/services/graphql/graph/model"
 )
 
-// RegisterUser is the resolver for the registerUser field.
-func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInput) (*model.AuthPayload, error) {
+// SignUp is the resolver for the signUp field.
+func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) (*model.SignUpOutput, error) {
 	authConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "auth_service" })
-	clAuth := pbAuth.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
+	clAuth := pb.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
 
-	signUpResponce, err := clAuth.SignUp(ctx, &pbAuth.SignUpRequest{
+	signUpResponce, err := clAuth.SignUp(ctx, &pb.SignUpRequest{
 		Username: input.Username,
 		Password: input.Password,
 	})
@@ -28,21 +27,9 @@ func (r *mutationResolver) RegisterUser(ctx context.Context, input model.UserInp
 		return nil, fmt.Errorf("graphql: could not sign up new user: %v", err)
 	}
 
-	tokenConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "token_service" })
-	clToken := pbToken.NewCreateTokensPairServiceClient(r.GrpcServices[tokenConnIdx].Conn)
-
-	tokenPairResponce, err := clToken.CreateTokensPair(ctx, &pbToken.CreateTokensPairRequest{
-		UserId: signUpResponce.UserId,
-		Roles:  signUpResponce.Roles,
-	})
-	if err != nil {
-		fmt.Print(err)
-		return nil, fmt.Errorf("graphql: could not create tokens: %v", err)
-	}
-
-	return &model.AuthPayload{
-		AccessToken:  tokenPairResponce.GetAccessToken(),
-		RefreshToken: tokenPairResponce.GetRefreshToken(),
+	return &model.SignUpOutput{
+		UserID: signUpResponce.GetUserId(),
+		Role:   signUpResponce.GetRole(),
 	}, nil
 }
 

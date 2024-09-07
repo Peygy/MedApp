@@ -15,12 +15,6 @@ type IUserManager interface {
 	// Gets user from the database by id.
 	// Returns user model or error.
 	GetUserById(userId string) (UserRecord, error)
-	// Updates user from the database by id.
-	// Returns count of updated records or error.
-	UpdateUserById(userId string, newUser UserRecord) (int, error)
-	// Deletes user from the database by id.
-	// Returns count of deleted records or error.
-	DeleteUserById(userId string) (int, error)
 }
 
 type UserRecord struct {
@@ -69,14 +63,18 @@ func (um *userManger) InsertUser(user UserRecord) (string, error) {
 }
 
 func (um *userManger) GetUserById(userId string) (UserRecord, error) {
-	f := new(UserRecord)
-	return *f, nil
-}
+	if userId == "" {
+		um.log.Errorf("Can't gets an user (%s) from the database", userId)
+		return UserRecord{}, errors.New("managers-user: can't get user from the database")
+	}
 
-func (um *userManger) UpdateUserById(userId string, newUser UserRecord) (int, error) {
-	return 0, nil
-}
+	var user UserRecord
+	query := `SELECT id, username FROM users WHERE id = $1`
+	if err := um.db.QueryRow(query, userId).Scan(&user.Id, &user.UserName); err != nil {
+		um.log.Errorf("Can't gets an user (%s) from the database: %v", userId, err)
+		return UserRecord{}, errors.New("managers-user: can't get user from the database")
+	}
 
-func (um *userManger) DeleteUserById(userId string) (int, error) {
-	return 0, nil
+	um.log.Infof("User %s geted successfully", userId)
+	return user, nil
 }

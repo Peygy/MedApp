@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
+import Cookies from 'js-cookie';  // Пакет для работы с куки (можно установить через npm install js-cookie)
 
-const REGISTER_USER_MUTATION = gql`
-  mutation RegisterUser($input: UserInput!) {
-    registerUser(input: $input) {
-      accessToken
-      refreshToken
+const SIGN_UP_MUTATION = gql`
+  mutation SignUp($input: SignUpInput!) {
+    signUp(input: $input) {
+      userId
+      role
     }
   }
 `;
@@ -13,11 +14,23 @@ const REGISTER_USER_MUTATION = gql`
 function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER_MUTATION);
+  const [signUp, { data, loading, error }] = useMutation(SIGN_UP_MUTATION);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    registerUser({ variables: { input: { username, password } } });
+    signUp({ variables: { input: { username, password } } })
+      .then((response) => {
+        const { userId, role } = response.data.signUp;
+        
+        // Сохраняем userId и role в куки
+        Cookies.set('userId', userId, { expires: 7 });  // Куки сохраняется на 7 дней
+        Cookies.set('role', role, { expires: 7 });
+
+        console.log('User ID and Role saved to cookies:', { userId, role });
+      })
+      .catch((err) => {
+        console.error('Error during sign up:', err);
+      });
   };
 
   return (
@@ -31,7 +44,7 @@ function App() {
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
-          type="text"
+          type="password"
           value={password}
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
@@ -42,8 +55,8 @@ function App() {
       {error && <p>Error: {error.message}</p>}
       {data && (
         <div>
-          <p>Access Token: {data.registerUser.accessToken}</p>
-          <p>Refresh Token: {data.registerUser.refreshToken}</p>
+          <p>User ID: {data.signUp.userId}</p>
+          <p>Role: {data.signUp.role}</p>
         </div>
       )}
     </div>

@@ -16,6 +16,7 @@ type IRoleManager interface {
 var roles = []string{
 	"user",
 	"admin",
+	"crew",
 }
 
 type roleManger struct {
