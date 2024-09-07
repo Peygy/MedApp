@@ -14,8 +14,17 @@ message AuthResponce {
     string role = 2;
 }
 
+message UserInfoRequest {
+    string userId = 1;
+}
+
+message UserInfoResponce {
+    string userName = 1;
+}
+
 service AuthService {
     rpc SignUp(UserRequest) returns (AuthResponce);
     rpc SignIn(UserRequest) returns (AuthResponce);
+    rpc GetUserInfo(UserInfoRequest) returns (UserInfoResponce);
 }
 //protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/graph_auth/graph_auth.proto

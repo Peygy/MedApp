@@ -13,6 +13,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/logout" element={<Account />} />
         <Route path="*" element={<Navigate to="/" />} /> {/* Редирект на главную, если путь неверный */}
       </Routes>
     </Router>
