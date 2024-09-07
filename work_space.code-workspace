@@ -1,24 +1,35 @@
 {
 	"folders": [
 		{
+			"name": "MedApp",
+			"path": "."
+		},
+		{
+			"name": "client",
 			"path": "client"
 		},
 		{
+			"name": "pkg",
 			"path": "internal/pkg"
 		},
 		{
+			"name": "graphql",
 			"path": "internal/services/graphql"
 		},
 		{
+			"name": "auth_service",
 			"path": "internal/services/auth_service"
 		},
 		{
+			"name": "health_service",
 			"path": "internal/services/health_service"
 		},
 		{
+			"name": "note_service",
 			"path": "internal/services/note_service"
 		},
 		{
+			"name": "crew_service",
 			"path": "internal/services/crew_service"
 		}
 	]

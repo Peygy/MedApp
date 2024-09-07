@@ -9,7 +9,7 @@ import (
 
 type IRoleManager interface {
 	AddRolesToUser(userId string, roles ...string) error
-
+	GetUserRole(userId string) (string, error)
 	DeleteRolesFromUser(userId string, roles ...string) error
 }
 
@@ -83,6 +83,23 @@ func (rm *roleManger) AddRolesToUser(userId string, roles ...string) error {
 
 	rm.log.Info("Role-Add: Transaction is commited successfully")
 	return nil
+}
+
+func (rm *roleManger) GetUserRole(userId string) (string, error) {
+	if userId == "" {
+		rm.log.Errorf("Can't gets user (%s) role from the database", userId)
+		return "", errors.New("managers-role: can't get user role from the database")
+	}
+
+	var userRole string
+	query := `SELECT role_id FROM users_roles WHERE user_id = $1`
+	if err := rm.db.QueryRow(query, userId).Scan(&userRole); err != nil {
+		rm.log.Errorf("Can't gets user (%s) role from the database: %v", userId, err)
+		return "", errors.New("managers-role: can't get user role from the database")
+	}
+
+	rm.log.Infof("User %s role geted successfully", userId)
+	return userRole, nil
 }
 
 func (rm *roleManger) deleteRoleFromUser(userId, role string) error {

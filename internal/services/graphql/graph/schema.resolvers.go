@@ -7,18 +7,27 @@ package graph
 import (
 	"context"
 	"fmt"
-	"sort"
 
+	"github.com/peygy/medapp/internal/pkg/grpc"
 	pb "github.com/peygy/medapp/internal/pkg/protos/graph_auth"
 	"github.com/peygy/medapp/internal/services/graphql/graph/model"
 )
 
-// SignUp is the resolver for the signUp field.
-func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) (*model.SignUpOutput, error) {
-	authConnIdx := sort.Search(len(r.GrpcServices), func(i int) bool { return r.GrpcServices[i].Name == "auth_service" })
-	clAuth := pb.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
+func findServiceIndex(services []grpc.GrpcService, name string) int {
+	for i, service := range services {
+		if service.Name == name {
+			return i
+		}
+	}
+	return -1
+}
 
-	signUpResponce, err := clAuth.SignUp(ctx, &pb.SignUpRequest{
+// SignUp is the resolver for the signUp field.
+func (r *mutationResolver) SignUp(ctx context.Context, input model.User) (*model.AuthPayload, error) {
+	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
+	client := pb.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
+
+	signUpResponce, err := client.SignUp(ctx, &pb.SignUpRequest{
 		Username: input.Username,
 		Password: input.Password,
 	})
@@ -27,7 +36,27 @@ func (r *mutationResolver) SignUp(ctx context.Context, input model.SignUpInput) 
 		return nil, fmt.Errorf("graphql: could not sign up new user: %v", err)
 	}
 
-	return &model.SignUpOutput{
+	return &model.AuthPayload{
+		UserID: signUpResponce.GetUserId(),
+		Role:   signUpResponce.GetRole(),
+	}, nil
+}
+
+// SignIn is the resolver for the signIn field.
+func (r *mutationResolver) SignIn(ctx context.Context, input model.User) (*model.AuthPayload, error) {
+	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
+	client := pb.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
+
+	signUpResponce, err := client.SignUp(ctx, &pb.SignUpRequest{
+		Username: input.Username,
+		Password: input.Password,
+	})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("graphql: could not sign in new user: %v", err)
+	}
+
+	return &model.AuthPayload{
 		UserID: signUpResponce.GetUserId(),
 		Role:   signUpResponce.GetRole(),
 	}, nil

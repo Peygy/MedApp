@@ -14,6 +14,7 @@ func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
 	routeGroup1 := eng.Engine.Group("/graphql")
 	{
 		routeGroup1.POST("/signup", graphqlHandler(grpcPull.Services))
+		routeGroup1.POST("/signin", graphqlHandler(grpcPull.Services))
 	}
 }
 

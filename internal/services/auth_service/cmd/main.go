@@ -23,6 +23,7 @@ func main() {
 				grpc.NewGrpcServer,
 				postgres.NewDatabaseConnection,
 
+				managers.NewPasswordManager,
 				managers.NewRoleManager,
 				managers.NewUserManager,
 			),

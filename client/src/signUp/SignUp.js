@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
-import Cookies from 'js-cookie';  // Пакет для работы с куки (можно установить через npm install js-cookie)
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const SIGN_UP_MUTATION = gql`
-  mutation SignUp($input: SignUpInput!) {
+  mutation SignUp($input: UserInput!) {
     signUp(input: $input) {
       userId
       role
@@ -11,22 +12,24 @@ const SIGN_UP_MUTATION = gql`
   }
 `;
 
-function App() {
+function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [signUp, { data, loading, error }] = useMutation(SIGN_UP_MUTATION);
+  const [signUp, { loading, error }] = useMutation(SIGN_UP_MUTATION);
+  const navigate = useNavigate();  // Хук для редиректа
 
   const handleSubmit = (e) => {
     e.preventDefault();
     signUp({ variables: { input: { username, password } } })
       .then((response) => {
         const { userId, role } = response.data.signUp;
-        
-        // Сохраняем userId и role в куки
-        Cookies.set('userId', userId, { expires: 7 });  // Куки сохраняется на 7 дней
+
+        // Сохраняем в куки
+        Cookies.set('userId', userId, { expires: 7 });
         Cookies.set('role', role, { expires: 7 });
 
-        console.log('User ID and Role saved to cookies:', { userId, role });
+        // Редирект на страницу входа
+        navigate('/');
       })
       .catch((err) => {
         console.error('Error during sign up:', err);
@@ -35,7 +38,7 @@ function App() {
 
   return (
     <div>
-      <h1>GraphQL Client</h1>
+      <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -49,18 +52,13 @@ function App() {
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Signing Up...' : 'Sign Up'}
+        </button>
       </form>
-      {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
-      {data && (
-        <div>
-          <p>User ID: {data.signUp.userId}</p>
-          <p>Role: {data.signUp.role}</p>
-        </div>
-      )}
     </div>
   );
 }
 
-export default App;
+export default SignUp;

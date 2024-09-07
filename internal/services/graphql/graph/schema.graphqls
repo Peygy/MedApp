@@ -1,13 +1,14 @@
 type Mutation {
-  signUp(input: SignUpInput!): SignUpOutput!
+  signUp(input: User!): AuthPayload!
+  signIn(input: User!): AuthPayload!
 }
 
-input SignUpInput {
+input User {
   username: String!
   password: String!
 }
 
-type SignUpOutput {
+type AuthPayload {
   userId: String!
   role: String!
 }

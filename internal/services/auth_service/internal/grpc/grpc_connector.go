@@ -11,6 +11,7 @@ import (
 
 func InitAuthGrpcServer(
 	server *grpc.GrpcServer,
+	passwordManager managers.IPasswordManager,
 	roleManager managers.IRoleManager,
 	userManager managers.IUserManager,
 	logger logger.ILogger) {
@@ -27,15 +28,25 @@ func InitAuthGrpcServer(
 type grpcServer struct {
 	pb.UnimplementedSignUpServiceServer
 
-	roleManager managers.IRoleManager
-	userManager managers.IUserManager
+	passwordManager managers.IPasswordManager
+	roleManager     managers.IRoleManager
+	userManager     managers.IUserManager
 
 	log logger.ILogger
 }
 
 func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
+	if err := s.passwordManager.ValidPassword(in.Password); err != nil {
+		return nil, err
+	}
+
+	hashedPassword, err := s.passwordManager.HashPassword(in.Password)
+	if err != nil {
+		return nil, err
+	}
+
 	userRole := "user"
-	user := managers.UserRecord{UserName: in.Username, Password: in.Password}
+	user := managers.UserRecord{UserName: in.Username, Password: hashedPassword}
 	userId, err := s.userManager.InsertUser(user)
 	if err != nil {
 		return nil, err
@@ -47,4 +58,22 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.Sign
 	}
 
 	return &pb.SignUpResponce{UserId: userId, Role: userRole}, nil
+}
+
+func (s *grpcServer) SignIn(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
+	user, err := s.userManager.GetUser(in.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.passwordManager.CheckPasswordHash(in.Password, user.Password); err != nil {
+		return nil, err
+	}
+
+	userRole, err := s.roleManager.GetUserRole(user.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SignUpResponce{UserId: user.Id, Role: userRole}, nil
 }

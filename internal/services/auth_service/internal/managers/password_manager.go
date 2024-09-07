@@ -8,10 +8,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type iPasswordManager interface {
-	hashPassword(password string) (string, error)
-	validPassword(password string) error
-	checkPasswordHash(password, hash string) bool
+type IPasswordManager interface {
+	HashPassword(password string) (string, error)
+	ValidPassword(password string) error
+	CheckPasswordHash(password, hash string) error
 }
 
 type passwordManager struct {
@@ -19,12 +19,12 @@ type passwordManager struct {
 	log    logger.ILogger
 }
 
-func newPasswordManager(minLen int, log logger.ILogger) iPasswordManager {
+func NewPasswordManager(minLen int, log logger.ILogger) IPasswordManager {
 	log.Info("PasswordManager created")
 	return &passwordManager{minLen: minLen, log: log}
 }
 
-func (p passwordManager) hashPassword(password string) (string, error) {
+func (p passwordManager) HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		p.log.Errorf("Can't create hashed password with error: %v", err)
@@ -35,7 +35,7 @@ func (p passwordManager) hashPassword(password string) (string, error) {
 	return string(bytes), nil
 }
 
-func (p passwordManager) validPassword(password string) error {
+func (p passwordManager) ValidPassword(password string) error {
 	if len(password) < p.minLen {
 		p.log.Error("Password length less than minimum length")
 		return errors.New("managers-password: user password is not valid: password length less than " + strconv.Itoa(p.minLen))
@@ -45,7 +45,11 @@ func (p passwordManager) validPassword(password string) error {
 	return nil
 }
 
-func (p passwordManager) checkPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
+func (p passwordManager) CheckPasswordHash(password, hash string) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)); err != nil {
+		p.log.Errorf("Password is not correct: %v", err)
+		return errors.New("managers-password: password is not correct")
+	}
+
+	return nil
 }
