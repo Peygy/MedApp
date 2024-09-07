@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "client"
+		},
+		{
+			"path": "internal/pkg"
+		},
+		{
+			"path": "internal/services/graphql"
+		},
+		{
+			"path": "internal/services/auth_service"
+		},
+		{
+			"path": "internal/services/health_service"
+		},
+		{
+			"path": "internal/services/note_service"
+		},
+		{
+			"path": "internal/services/crew_service"
+		}
+	]
+}
