@@ -1,9 +1,21 @@
 type Mutation {
-  signUp(input: User!): AuthPayload!
-  signIn(input: User!): AuthPayload!
+  signUp(input: AuthData!): AuthPayload!
+  signIn(input: AuthData!): AuthPayload!
 }
 
-input User {
+type Query {
+  getUserInfo(input: UserAccountData!): UserAccountPayload!
+}
+
+input UserAccountData {
+  userId: String!
+}
+
+type UserAccountPayload {
+  username: String!
+}
+
+input AuthData {
   username: String!
   password: String!
 }

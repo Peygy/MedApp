@@ -12,6 +12,8 @@ github.com/peygy/medapp/internal/pkg v0.0.0-20240907133247-d1438a44989a h1:g5y9I
 github.com/peygy/medapp/internal/pkg v0.0.0-20240907133247-d1438a44989a/go.mod h1:aPQMDFskvPv2V+m3tmOe8pw0Nc+jmtcKFmj2mYW7Yzg=
 github.com/peygy/medapp/internal/pkg v0.0.0-20240907151553-7f29ad24f9e3 h1:munGnDm6u6NJTDtmnKKbmd5MgqCYbwdu5xLlsrTZopA=
 github.com/peygy/medapp/internal/pkg v0.0.0-20240907151553-7f29ad24f9e3/go.mod h1:aPQMDFskvPv2V+m3tmOe8pw0Nc+jmtcKFmj2mYW7Yzg=
+github.com/peygy/medapp/internal/pkg v0.0.0-20240907171858-f50cbd7d25b1 h1:JC+6PN7s5IAhx5JIlgL9MZJkKZI6c/1wB2W55mm0Oso=
+github.com/peygy/medapp/internal/pkg v0.0.0-20240907171858-f50cbd7d25b1/go.mod h1:aPQMDFskvPv2V+m3tmOe8pw0Nc+jmtcKFmj2mYW7Yzg=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rogpeppe/go-internal v1.12.0 h1:exVL4IDcn6na9z1rAb56Vxr+CgyK3nn3O+epU5NdKM8=

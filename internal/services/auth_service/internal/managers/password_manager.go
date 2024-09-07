@@ -19,9 +19,9 @@ type passwordManager struct {
 	log    logger.ILogger
 }
 
-func NewPasswordManager(minLen int, log logger.ILogger) IPasswordManager {
+func NewPasswordManager(log logger.ILogger) IPasswordManager {
 	log.Info("PasswordManager created")
-	return &passwordManager{minLen: minLen, log: log}
+	return &passwordManager{minLen: 7, log: log}
 }
 
 func (p passwordManager) HashPassword(password string) (string, error) {

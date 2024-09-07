@@ -7,14 +7,25 @@ import (
 	ginServer "github.com/peygy/medapp/internal/pkg/gin"
 	"github.com/peygy/medapp/internal/pkg/grpc"
 	"github.com/peygy/medapp/internal/services/graphql/graph"
+	"github.com/peygy/medapp/internal/services/graphql/internal/middleware"
 )
 
 func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
-	eng.Engine.Use(cors.Default())
-	routeGroup1 := eng.Engine.Group("/graphql")
+	eng.Engine.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost"},
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	  }))
+
+	eng.Engine.POST("/graphql/signup", graphqlHandler(grpcPull.Services))
+	eng.Engine.POST("/graphql/signin", graphqlHandler(grpcPull.Services))
+
+	protected := eng.Engine.Group("/graphql")
+	protected.Use(middleware.AuthMiddleware())
 	{
-		routeGroup1.POST("/signup", graphqlHandler(grpcPull.Services))
-		routeGroup1.POST("/signin", graphqlHandler(grpcPull.Services))
+		protected.POST("/account", graphqlHandler(grpcPull.Services))
+		protected.POST("/logout", graphqlHandler(grpcPull.Services))
 	}
 }
 

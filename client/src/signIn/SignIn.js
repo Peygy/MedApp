@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const SIGN_IN_MUTATION = gql`
-  mutation SignIn($input: UserInput!) {
+  mutation SignIn($input: AuthData!) {
     signIn(input: $input) {
       userId
       role
@@ -15,7 +15,11 @@ const SIGN_IN_MUTATION = gql`
 function SignIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [signIn, { loading, error }] = useMutation(SIGN_IN_MUTATION);
+  const [signIn, { loading, error }] = useMutation(SIGN_IN_MUTATION, {
+    context: {
+      uri: 'http://localhost:4000/graphql/signin'
+    }
+  });
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -28,8 +32,8 @@ function SignIn() {
         Cookies.set('userId', userId, { expires: 7 });
         Cookies.set('role', role, { expires: 7 });
 
-        // Перенаправление после успешного входа (можно перенаправить на другую страницу)
-        navigate('/');
+        // Перенаправление после успешного входа
+        navigate('/account');
       })
       .catch((err) => {
         console.error('Error during sign in:', err);

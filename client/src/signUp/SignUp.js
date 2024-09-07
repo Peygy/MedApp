@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const SIGN_UP_MUTATION = gql`
-  mutation SignUp($input: UserInput!) {
+  mutation SignUp($input: AuthData!) {
     signUp(input: $input) {
       userId
       role
@@ -15,7 +15,11 @@ const SIGN_UP_MUTATION = gql`
 function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [signUp, { loading, error }] = useMutation(SIGN_UP_MUTATION);
+  const [signUp, { loading, error }] = useMutation(SIGN_UP_MUTATION, {
+    context: {
+      uri: 'http://localhost:4000/graphql/signup'
+    }
+  });
   const navigate = useNavigate();  // Хук для редиректа
 
   const handleSubmit = (e) => {
@@ -29,7 +33,7 @@ function SignUp() {
         Cookies.set('role', role, { expires: 7 });
 
         // Редирект на страницу входа
-        navigate('/');
+        navigate('/account');
       })
       .catch((err) => {
         console.error('Error during sign up:', err);

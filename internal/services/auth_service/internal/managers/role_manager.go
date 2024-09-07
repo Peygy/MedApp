@@ -91,10 +91,17 @@ func (rm *roleManger) GetUserRole(userId string) (string, error) {
 		return "", errors.New("managers-role: can't get user role from the database")
 	}
 
-	var userRole string
+	var userRoleId string
 	query := `SELECT role_id FROM users_roles WHERE user_id = $1`
-	if err := rm.db.QueryRow(query, userId).Scan(&userRole); err != nil {
-		rm.log.Errorf("Can't gets user (%s) role from the database: %v", userId, err)
+	if err := rm.db.QueryRow(query, userId).Scan(&userRoleId); err != nil {
+		rm.log.Errorf("Can't gets user (%s) role id from the database: %v", userId, err)
+		return "", errors.New("managers-role: can't get user role from the database")
+	}
+
+	var userRole string
+	query = `SELECT role_name FROM roles WHERE id = $1`
+	if err := rm.db.QueryRow(query, userRoleId).Scan(&userRole); err != nil {
+		rm.log.Errorf("Can't gets role (%s) role title from the database: %v", userRoleId, err)
 		return "", errors.New("managers-role: can't get user role from the database")
 	}
 

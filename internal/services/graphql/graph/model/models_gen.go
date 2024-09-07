@@ -2,6 +2,11 @@
 
 package model
 
+type AuthData struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 type AuthPayload struct {
 	UserID string `json:"userId"`
 	Role   string `json:"role"`
@@ -13,7 +18,10 @@ type Mutation struct {
 type Query struct {
 }
 
-type User struct {
+type UserAccountData struct {
+	UserID string `json:"userId"`
+}
+
+type UserAccountPayload struct {
 	Username string `json:"username"`
-	Password string `json:"password"`
 }

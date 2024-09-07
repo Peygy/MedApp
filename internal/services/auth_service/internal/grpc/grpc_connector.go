@@ -16,17 +16,18 @@ func InitAuthGrpcServer(
 	userManager managers.IUserManager,
 	logger logger.ILogger) {
 	grpcServer := &grpcServer{
-		roleManager: roleManager,
-		userManager: userManager,
-		log:         logger,
+		passwordManager: passwordManager,
+		roleManager:     roleManager,
+		userManager:     userManager,
+		log:             logger,
 	}
-	pb.RegisterSignUpServiceServer(server.Engine, grpcServer)
+	pb.RegisterAuthServiceServer(server.Engine, grpcServer)
 
 	logger.Info("Initialize of grpc server successfully")
 }
 
 type grpcServer struct {
-	pb.UnimplementedSignUpServiceServer
+	pb.UnimplementedAuthServiceServer
 
 	passwordManager managers.IPasswordManager
 	roleManager     managers.IRoleManager
@@ -35,7 +36,7 @@ type grpcServer struct {
 	log logger.ILogger
 }
 
-func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
+func (s *grpcServer) SignUp(ctx context.Context, in *pb.UserRequest) (*pb.AuthResponce, error) {
 	if err := s.passwordManager.ValidPassword(in.Password); err != nil {
 		return nil, err
 	}
@@ -57,10 +58,10 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.SignUpRequest) (*pb.Sign
 		return nil, err
 	}
 
-	return &pb.SignUpResponce{UserId: userId, Role: userRole}, nil
+	return &pb.AuthResponce{UserId: userId, Role: userRole}, nil
 }
 
-func (s *grpcServer) SignIn(ctx context.Context, in *pb.SignUpRequest) (*pb.SignUpResponce, error) {
+func (s *grpcServer) SignIn(ctx context.Context, in *pb.UserRequest) (*pb.AuthResponce, error) {
 	user, err := s.userManager.GetUser(in.Username)
 	if err != nil {
 		return nil, err
@@ -75,5 +76,5 @@ func (s *grpcServer) SignIn(ctx context.Context, in *pb.SignUpRequest) (*pb.Sign
 		return nil, err
 	}
 
-	return &pb.SignUpResponce{UserId: user.Id, Role: userRole}, nil
+	return &pb.AuthResponce{UserId: user.Id, Role: userRole}, nil
 }

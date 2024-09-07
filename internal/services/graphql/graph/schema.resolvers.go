@@ -13,21 +13,12 @@ import (
 	"github.com/peygy/medapp/internal/services/graphql/graph/model"
 )
 
-func findServiceIndex(services []grpc.GrpcService, name string) int {
-	for i, service := range services {
-		if service.Name == name {
-			return i
-		}
-	}
-	return -1
-}
-
 // SignUp is the resolver for the signUp field.
-func (r *mutationResolver) SignUp(ctx context.Context, input model.User) (*model.AuthPayload, error) {
+func (r *mutationResolver) SignUp(ctx context.Context, input model.AuthData) (*model.AuthPayload, error) {
 	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
-	client := pb.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
+	client := pb.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
 
-	signUpResponce, err := client.SignUp(ctx, &pb.SignUpRequest{
+	responce, err := client.SignUp(ctx, &pb.UserRequest{
 		Username: input.Username,
 		Password: input.Password,
 	})
@@ -37,32 +28,58 @@ func (r *mutationResolver) SignUp(ctx context.Context, input model.User) (*model
 	}
 
 	return &model.AuthPayload{
-		UserID: signUpResponce.GetUserId(),
-		Role:   signUpResponce.GetRole(),
+		UserID: responce.GetUserId(),
+		Role:   responce.GetRole(),
 	}, nil
 }
 
 // SignIn is the resolver for the signIn field.
-func (r *mutationResolver) SignIn(ctx context.Context, input model.User) (*model.AuthPayload, error) {
+func (r *mutationResolver) SignIn(ctx context.Context, input model.AuthData) (*model.AuthPayload, error) {
 	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
-	client := pb.NewSignUpServiceClient(r.GrpcServices[authConnIdx].Conn)
+	client := pb.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
 
-	signUpResponce, err := client.SignUp(ctx, &pb.SignUpRequest{
+	responce, err := client.SignIn(ctx, &pb.UserRequest{
 		Username: input.Username,
 		Password: input.Password,
 	})
 	if err != nil {
 		fmt.Print(err)
-		return nil, fmt.Errorf("graphql: could not sign in new user: %v", err)
+		return nil, fmt.Errorf("graphql: could not sign in exists user: %v", err)
 	}
 
 	return &model.AuthPayload{
-		UserID: signUpResponce.GetUserId(),
-		Role:   signUpResponce.GetRole(),
+		UserID: responce.GetUserId(),
+		Role:   responce.GetRole(),
+	}, nil
+}
+
+// GetUserInfo is the resolver for the getUserInfo field.
+func (r *queryResolver) GetUserInfo(ctx context.Context, input model.UserAccountData) (*model.UserAccountPayload, error) {
+	return &model.UserAccountPayload{
+		Username: "USERNAME" + input.UserID,
 	}, nil
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func findServiceIndex(services []grpc.GrpcService, name string) int {
+	for i, service := range services {
+		if service.Name == name {
+			return i
+		}
+	}
+	return -1
+}
