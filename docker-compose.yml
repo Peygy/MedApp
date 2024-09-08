@@ -13,21 +13,22 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-      - auth-service
+      - auth_service
+      - health_service
     networks:
       - microservices-network
 
-  auth-service:
+  auth_service:
     build: ./internal/services/auth_service
     ports:
       - "5101:5101"
     depends_on:
-      - auth-postgres-db
+      - auth_service-db
     networks:
       - microservices-network
       - auth-network
 
-  auth-postgres-db:
+  auth_service-db:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
@@ -36,13 +37,38 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - auth-postgres_data:/var/lib/postgresql/data
+      - auth_service-db-data:/var/lib/postgresql/data
     networks:
       - auth-network
 
+  health_service:
+    build: ./internal/services/health_service
+    ports:
+      - "5102:5102"
+    depends_on:
+      - health_service-db
+    networks:
+      - microservices-network
+      - health-network
+
+  health_service-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: healthdatadb
+    ports:
+      - "5433:5432"
+    volumes:
+      - health_service-db-data:/var/lib/postgresql/data
+    networks:
+      - health-network
+
 volumes:
-  auth-postgres_data:
+  auth_service-db-data:
+  health_service-db-data:
 
 networks:
   microservices-network:
   auth-network:
+  health-network:

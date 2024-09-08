@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = "./;graph_health";
+
+package graph_health;
+
+message GetHealthDataRequest {
+    string userId = 1;
+}
+
+message UpdateHealthDataRequest {
+    string userId = 1;
+
+    int32 age = 2;
+    float height = 3;
+    float weight = 4;
+    int32 pulse = 5;
+    string pressure = 6;
+}
+
+message HealthDataResponce {
+    int32 age = 1;
+    float height = 2;
+    float weight = 3;
+    int32 pulse = 4;
+    string pressure = 5;
+
+    float dailyWater = 6;
+    float bodyMassIndex = 7;
+}
+
+service AuthService {
+    rpc GetHealthData(GetHealthDataRequest) returns (HealthDataResponce);
+    rpc UpdateHealthData(UpdateHealthDataRequest) returns (HealthDataResponce);
+}
+//protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/graph_health/graph_health.proto

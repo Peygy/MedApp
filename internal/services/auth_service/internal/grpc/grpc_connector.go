@@ -62,7 +62,7 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.UserRequest) (*pb.AuthRe
 }
 
 func (s *grpcServer) SignIn(ctx context.Context, in *pb.UserRequest) (*pb.AuthResponce, error) {
-	user, err := s.userManager.GetUser(in.Username)
+	user, err := s.userManager.GetUserByName(in.Username)
 	if err != nil {
 		return nil, err
 	}
@@ -77,4 +77,13 @@ func (s *grpcServer) SignIn(ctx context.Context, in *pb.UserRequest) (*pb.AuthRe
 	}
 
 	return &pb.AuthResponce{UserId: user.Id, Role: userRole}, nil
+}
+
+func (s *grpcServer) GetUserInfo(ctx context.Context, in *pb.UserInfoRequest) (*pb.UserInfoResponce, error) {
+	user, err := s.userManager.GetUserById(in.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.UserInfoResponce{UserName: user.UserName}, nil
 }

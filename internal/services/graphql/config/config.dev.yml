@@ -6,4 +6,7 @@ grpc-client:
   services:
     - name: "auth_service"
       port: ":5101"
-      host: "auth-service"
+      host: "auth_service"
+    - name: "health_service"
+      port: ":5102"
+      host: "health_service"

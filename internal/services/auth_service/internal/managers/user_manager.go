@@ -12,9 +12,12 @@ type IUserManager interface {
 	// Adds new user to the database.
 	// Returns new user id or error.
 	InsertUser(user UserRecord) (string, error)
-	// Gets user from the database by id.
+	// Gets user from the database by name.
 	// Returns user model or error.
-	GetUser(userName string) (UserRecord, error)
+	GetUserByName(userName string) (UserRecord, error)
+	// Gets user from the database by name.
+	// Returns user model or error.
+	GetUserById(userId string) (UserRecord, error)
 }
 
 type UserRecord struct {
@@ -48,7 +51,7 @@ func (um *userManger) InsertUser(user UserRecord) (string, error) {
 	return userId, nil
 }
 
-func (um *userManger) GetUser(userName string) (UserRecord, error) {
+func (um *userManger) GetUserByName(userName string) (UserRecord, error) {
 	if userName == "" {
 		um.log.Errorf("Can't gets an user (%s) from the database", userName)
 		return UserRecord{}, errors.New("managers-user: can't get user from the database")
@@ -62,5 +65,22 @@ func (um *userManger) GetUser(userName string) (UserRecord, error) {
 	}
 
 	um.log.Infof("User %s getted successfully", userName)
+	return user, nil
+}
+
+func (um *userManger) GetUserById(userId string) (UserRecord, error) {
+	if userId == "" {
+		um.log.Errorf("Can't gets an user (%s) from the database", userId)
+		return UserRecord{}, errors.New("managers-user: can't get user from the database")
+	}
+
+	var user UserRecord
+	query := `SELECT id, username, password_hash FROM users WHERE id = $1`
+	if err := um.db.QueryRow(query, userId).Scan(&user.Id, &user.UserName, &user.Password); err != nil {
+		um.log.Errorf("Can't gets an user (%s) from the database: %v", userId, err)
+		return UserRecord{}, errors.New("managers-user: can't get user from the database")
+	}
+
+	um.log.Infof("User %s getted successfully", userId)
 	return user, nil
 }

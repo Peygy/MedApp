@@ -55,8 +55,19 @@ func (r *mutationResolver) SignIn(ctx context.Context, input model.AuthData) (*m
 
 // GetUserInfo is the resolver for the getUserInfo field.
 func (r *queryResolver) GetUserInfo(ctx context.Context, input model.UserAccountData) (*model.UserAccountPayload, error) {
+	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
+	client := pb.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
+
+	responce, err := client.GetUserInfo(ctx, &pb.UserInfoRequest{
+		UserId: input.UserID,
+	})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("graphql: could not get user info: %v", err)
+	}
+
 	return &model.UserAccountPayload{
-		Username: "USERNAME" + input.UserID,
+		Username: responce.GetUserName(),
 	}, nil
 }
 
