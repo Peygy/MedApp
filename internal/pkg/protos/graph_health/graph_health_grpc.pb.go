@@ -19,139 +19,139 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthService_GetHealthData_FullMethodName    = "/graph_health.AuthService/GetHealthData"
-	AuthService_UpdateHealthData_FullMethodName = "/graph_health.AuthService/UpdateHealthData"
+	HealthService_GetHealthData_FullMethodName    = "/graph_health.HealthService/GetHealthData"
+	HealthService_UpdateHealthData_FullMethodName = "/graph_health.HealthService/UpdateHealthData"
 )
 
-// AuthServiceClient is the client API for AuthService service.
+// HealthServiceClient is the client API for HealthService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AuthServiceClient interface {
+type HealthServiceClient interface {
 	GetHealthData(ctx context.Context, in *GetHealthDataRequest, opts ...grpc.CallOption) (*HealthDataResponce, error)
 	UpdateHealthData(ctx context.Context, in *UpdateHealthDataRequest, opts ...grpc.CallOption) (*HealthDataResponce, error)
 }
 
-type authServiceClient struct {
+type healthServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
-	return &authServiceClient{cc}
+func NewHealthServiceClient(cc grpc.ClientConnInterface) HealthServiceClient {
+	return &healthServiceClient{cc}
 }
 
-func (c *authServiceClient) GetHealthData(ctx context.Context, in *GetHealthDataRequest, opts ...grpc.CallOption) (*HealthDataResponce, error) {
+func (c *healthServiceClient) GetHealthData(ctx context.Context, in *GetHealthDataRequest, opts ...grpc.CallOption) (*HealthDataResponce, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HealthDataResponce)
-	err := c.cc.Invoke(ctx, AuthService_GetHealthData_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HealthService_GetHealthData_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) UpdateHealthData(ctx context.Context, in *UpdateHealthDataRequest, opts ...grpc.CallOption) (*HealthDataResponce, error) {
+func (c *healthServiceClient) UpdateHealthData(ctx context.Context, in *UpdateHealthDataRequest, opts ...grpc.CallOption) (*HealthDataResponce, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HealthDataResponce)
-	err := c.cc.Invoke(ctx, AuthService_UpdateHealthData_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, HealthService_UpdateHealthData_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AuthServiceServer is the server API for AuthService service.
-// All implementations must embed UnimplementedAuthServiceServer
+// HealthServiceServer is the server API for HealthService service.
+// All implementations must embed UnimplementedHealthServiceServer
 // for forward compatibility.
-type AuthServiceServer interface {
+type HealthServiceServer interface {
 	GetHealthData(context.Context, *GetHealthDataRequest) (*HealthDataResponce, error)
 	UpdateHealthData(context.Context, *UpdateHealthDataRequest) (*HealthDataResponce, error)
-	mustEmbedUnimplementedAuthServiceServer()
+	mustEmbedUnimplementedHealthServiceServer()
 }
 
-// UnimplementedAuthServiceServer must be embedded to have
+// UnimplementedHealthServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedAuthServiceServer struct{}
+type UnimplementedHealthServiceServer struct{}
 
-func (UnimplementedAuthServiceServer) GetHealthData(context.Context, *GetHealthDataRequest) (*HealthDataResponce, error) {
+func (UnimplementedHealthServiceServer) GetHealthData(context.Context, *GetHealthDataRequest) (*HealthDataResponce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetHealthData not implemented")
 }
-func (UnimplementedAuthServiceServer) UpdateHealthData(context.Context, *UpdateHealthDataRequest) (*HealthDataResponce, error) {
+func (UnimplementedHealthServiceServer) UpdateHealthData(context.Context, *UpdateHealthDataRequest) (*HealthDataResponce, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateHealthData not implemented")
 }
-func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
-func (UnimplementedAuthServiceServer) testEmbeddedByValue()                     {}
+func (UnimplementedHealthServiceServer) mustEmbedUnimplementedHealthServiceServer() {}
+func (UnimplementedHealthServiceServer) testEmbeddedByValue()                       {}
 
-// UnsafeAuthServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AuthServiceServer will
+// UnsafeHealthServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to HealthServiceServer will
 // result in compilation errors.
-type UnsafeAuthServiceServer interface {
-	mustEmbedUnimplementedAuthServiceServer()
+type UnsafeHealthServiceServer interface {
+	mustEmbedUnimplementedHealthServiceServer()
 }
 
-func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
-	// If the following call pancis, it indicates UnimplementedAuthServiceServer was
+func RegisterHealthServiceServer(s grpc.ServiceRegistrar, srv HealthServiceServer) {
+	// If the following call pancis, it indicates UnimplementedHealthServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&AuthService_ServiceDesc, srv)
+	s.RegisterService(&HealthService_ServiceDesc, srv)
 }
 
-func _AuthService_GetHealthData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HealthService_GetHealthData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetHealthDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).GetHealthData(ctx, in)
+		return srv.(HealthServiceServer).GetHealthData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_GetHealthData_FullMethodName,
+		FullMethod: HealthService_GetHealthData_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).GetHealthData(ctx, req.(*GetHealthDataRequest))
+		return srv.(HealthServiceServer).GetHealthData(ctx, req.(*GetHealthDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_UpdateHealthData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _HealthService_UpdateHealthData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateHealthDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).UpdateHealthData(ctx, in)
+		return srv.(HealthServiceServer).UpdateHealthData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_UpdateHealthData_FullMethodName,
+		FullMethod: HealthService_UpdateHealthData_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).UpdateHealthData(ctx, req.(*UpdateHealthDataRequest))
+		return srv.(HealthServiceServer).UpdateHealthData(ctx, req.(*UpdateHealthDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
+// HealthService_ServiceDesc is the grpc.ServiceDesc for HealthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "graph_health.AuthService",
-	HandlerType: (*AuthServiceServer)(nil),
+var HealthService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "graph_health.HealthService",
+	HandlerType: (*HealthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetHealthData",
-			Handler:    _AuthService_GetHealthData_Handler,
+			Handler:    _HealthService_GetHealthData_Handler,
 		},
 		{
 			MethodName: "UpdateHealthData",
-			Handler:    _AuthService_UpdateHealthData_Handler,
+			Handler:    _HealthService_UpdateHealthData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

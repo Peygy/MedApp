@@ -29,7 +29,7 @@ message HealthDataResponce {
     float bodyMassIndex = 7;
 }
 
-service AuthService {
+service HealthService {
     rpc GetHealthData(GetHealthDataRequest) returns (HealthDataResponce);
     rpc UpdateHealthData(UpdateHealthDataRequest) returns (HealthDataResponce);
 }
