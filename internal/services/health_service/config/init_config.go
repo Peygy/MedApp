@@ -8,13 +8,13 @@ import (
 
 const configPath = "./config/config.dev.yml"
 
-type AuthConfig struct {
+type HealthConfig struct {
 	GrpcServer     *grpc.GrpcServerConfig   `yaml:"grpc-server"`
 	DatabaseConfig *postgres.PostgresConfig `yaml:"database"`
 }
 
-func NewAuthConfig() (*AuthConfig, *grpc.GrpcServerConfig, *postgres.PostgresConfig, error) {
-	cfg, err := config.NewConfig[AuthConfig](configPath)
+func NewAuthConfig() (*HealthConfig, *grpc.GrpcServerConfig, *postgres.PostgresConfig, error) {
+	cfg, err := config.NewConfig[HealthConfig](configPath)
 	if err != nil {
 		return nil, nil, nil, err
 	}

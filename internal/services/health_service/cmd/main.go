@@ -8,6 +8,7 @@ import (
 	"github.com/peygy/medapp/internal/services/health_service/config"
 	"github.com/peygy/medapp/internal/services/health_service/internal/data"
 	grpcConn "github.com/peygy/medapp/internal/services/health_service/internal/grpc"
+	"github.com/peygy/medapp/internal/services/health_service/internal/services"
 	"github.com/peygy/medapp/internal/services/health_service/server"
 	"go.uber.org/fx"
 )
@@ -21,9 +22,11 @@ func main() {
 				context.NewContext,
 				grpc.NewGrpcServer,
 				postgres.NewDatabaseConnection,
+
+				services.NewHealthService,
 			),
 			fx.Invoke(data.InitDatabaseSchema),
-			fx.Invoke(grpcConn.InitAuthGrpcServer),
+			fx.Invoke(grpcConn.InitHealhGrpcServer),
 			fx.Invoke(server.RunServers),
 		),
 	).Run()

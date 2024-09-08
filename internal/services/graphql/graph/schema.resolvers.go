@@ -7,18 +7,20 @@ package graph
 import (
 	"context"
 	"fmt"
+	"math"
 
 	"github.com/peygy/medapp/internal/pkg/grpc"
-	pb "github.com/peygy/medapp/internal/pkg/protos/graph_auth"
+	pbAuth "github.com/peygy/medapp/internal/pkg/protos/graph_auth"
+	pbHealth "github.com/peygy/medapp/internal/pkg/protos/graph_health"
 	"github.com/peygy/medapp/internal/services/graphql/graph/model"
 )
 
 // SignUp is the resolver for the signUp field.
 func (r *mutationResolver) SignUp(ctx context.Context, input model.AuthData) (*model.AuthPayload, error) {
 	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
-	client := pb.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
+	client := pbAuth.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
 
-	responce, err := client.SignUp(ctx, &pb.UserRequest{
+	responce, err := client.SignUp(ctx, &pbAuth.UserRequest{
 		Username: input.Username,
 		Password: input.Password,
 	})
@@ -36,9 +38,9 @@ func (r *mutationResolver) SignUp(ctx context.Context, input model.AuthData) (*m
 // SignIn is the resolver for the signIn field.
 func (r *mutationResolver) SignIn(ctx context.Context, input model.AuthData) (*model.AuthPayload, error) {
 	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
-	client := pb.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
+	client := pbAuth.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
 
-	responce, err := client.SignIn(ctx, &pb.UserRequest{
+	responce, err := client.SignIn(ctx, &pbAuth.UserRequest{
 		Username: input.Username,
 		Password: input.Password,
 	})
@@ -53,21 +55,78 @@ func (r *mutationResolver) SignIn(ctx context.Context, input model.AuthData) (*m
 	}, nil
 }
 
-// GetUserInfo is the resolver for the getUserInfo field.
-func (r *queryResolver) GetUserInfo(ctx context.Context, input model.UserAccountData) (*model.UserAccountPayload, error) {
+// UpdateUserHealthData is the resolver for the updateUserHealthData field.
+func (r *mutationResolver) UpdateUserHealthData(ctx context.Context, input model.UpdateUserHealthDataInput) (*model.UserAccountPayload, error) {
 	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
-	client := pb.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
+	authClient := pbAuth.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
+	healthConnIdx := findServiceIndex(r.GrpcServices, "health_service")
+	healthClient := pbHealth.NewHealthServiceClient(r.GrpcServices[healthConnIdx].Conn)
 
-	responce, err := client.GetUserInfo(ctx, &pb.UserInfoRequest{
+	responceAuth, err := authClient.GetUserInfo(ctx, &pbAuth.UserInfoRequest{
 		UserId: input.UserID,
 	})
 	if err != nil {
 		fmt.Print(err)
-		return nil, fmt.Errorf("graphql: could not get user info: %v", err)
+		return nil, fmt.Errorf("graphql: could not get user name: %v", err)
+	}
+
+	responceHealth, err := healthClient.UpdateHealthData(ctx, &pbHealth.UpdateHealthDataRequest{
+		UserId:   input.UserID,
+		Age:      int32(*input.Age),
+		Height:   float32(*input.Height),
+		Weight:   float32(*input.Weight),
+		Pulse:    int32(*input.Pulse),
+		Pressure: *input.Pressure,
+	})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("graphql: could not get user health data: %v", err)
 	}
 
 	return &model.UserAccountPayload{
-		Username: responce.GetUserName(),
+		Username:      responceAuth.GetUserName(),
+		Age:           int(responceHealth.GetAge()),
+		Height:        float64(responceHealth.GetHeight()),
+		Weight:        float64(responceHealth.GetWeight()),
+		Pulse:         int(responceHealth.GetPulse()),
+		Pressure:      responceHealth.GetPressure(),
+		DailyWater:    toFloat64Pointer(responceHealth.GetDailyWater()),
+		BodyMassIndex: toFloat64Pointer(responceHealth.GetBodyMassIndex()),
+	}, nil
+}
+
+// GetUserInfo is the resolver for the getUserInfo field.
+func (r *queryResolver) GetUserInfo(ctx context.Context, input model.UserAccountData) (*model.UserAccountPayload, error) {
+	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
+	authClient := pbAuth.NewAuthServiceClient(r.GrpcServices[authConnIdx].Conn)
+	healthConnIdx := findServiceIndex(r.GrpcServices, "health_service")
+	healthClient := pbHealth.NewHealthServiceClient(r.GrpcServices[healthConnIdx].Conn)
+
+	responceAuth, err := authClient.GetUserInfo(ctx, &pbAuth.UserInfoRequest{
+		UserId: input.UserID,
+	})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("graphql: could not get user name: %v", err)
+	}
+
+	responceHealth, err := healthClient.GetHealthData(ctx, &pbHealth.GetHealthDataRequest{
+		UserId: input.UserID,
+	})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("graphql: could not get user health data: %v", err)
+	}
+
+	return &model.UserAccountPayload{
+		Username:      responceAuth.GetUserName(),
+		Age:           int(responceHealth.GetAge()),
+		Height:        float64(responceHealth.GetHeight()),
+		Weight:        float64(responceHealth.GetWeight()),
+		Pulse:         int(responceHealth.GetPulse()),
+		Pressure:      responceHealth.GetPressure(),
+		DailyWater:    toFloat64Pointer(responceHealth.GetDailyWater()),
+		BodyMassIndex: toFloat64Pointer(responceHealth.GetBodyMassIndex()),
 	}, nil
 }
 
@@ -93,4 +152,12 @@ func findServiceIndex(services []grpc.GrpcService, name string) int {
 		}
 	}
 	return -1
+}
+
+func toFloat64Pointer(value float32) *float64 {
+	if math.IsNaN(float64(value)) || math.IsInf(float64(value), 0) {
+		return nil
+	}
+	result := float64(value)
+	return &result
 }

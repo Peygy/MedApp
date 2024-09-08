@@ -53,8 +53,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		SignIn func(childComplexity int, input model.AuthData) int
-		SignUp func(childComplexity int, input model.AuthData) int
+		SignIn               func(childComplexity int, input model.AuthData) int
+		SignUp               func(childComplexity int, input model.AuthData) int
+		UpdateUserHealthData func(childComplexity int, input model.UpdateUserHealthDataInput) int
 	}
 
 	Query struct {
@@ -62,13 +63,21 @@ type ComplexityRoot struct {
 	}
 
 	UserAccountPayload struct {
-		Username func(childComplexity int) int
+		Age           func(childComplexity int) int
+		BodyMassIndex func(childComplexity int) int
+		DailyWater    func(childComplexity int) int
+		Height        func(childComplexity int) int
+		Pressure      func(childComplexity int) int
+		Pulse         func(childComplexity int) int
+		Username      func(childComplexity int) int
+		Weight        func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
 	SignUp(ctx context.Context, input model.AuthData) (*model.AuthPayload, error)
 	SignIn(ctx context.Context, input model.AuthData) (*model.AuthPayload, error)
+	UpdateUserHealthData(ctx context.Context, input model.UpdateUserHealthDataInput) (*model.UserAccountPayload, error)
 }
 type QueryResolver interface {
 	GetUserInfo(ctx context.Context, input model.UserAccountData) (*model.UserAccountPayload, error)
@@ -131,6 +140,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.SignUp(childComplexity, args["input"].(model.AuthData)), true
 
+	case "Mutation.updateUserHealthData":
+		if e.complexity.Mutation.UpdateUserHealthData == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateUserHealthData_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateUserHealthData(childComplexity, args["input"].(model.UpdateUserHealthDataInput)), true
+
 	case "Query.getUserInfo":
 		if e.complexity.Query.GetUserInfo == nil {
 			break
@@ -143,12 +164,61 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.GetUserInfo(childComplexity, args["input"].(model.UserAccountData)), true
 
+	case "UserAccountPayload.age":
+		if e.complexity.UserAccountPayload.Age == nil {
+			break
+		}
+
+		return e.complexity.UserAccountPayload.Age(childComplexity), true
+
+	case "UserAccountPayload.bodyMassIndex":
+		if e.complexity.UserAccountPayload.BodyMassIndex == nil {
+			break
+		}
+
+		return e.complexity.UserAccountPayload.BodyMassIndex(childComplexity), true
+
+	case "UserAccountPayload.dailyWater":
+		if e.complexity.UserAccountPayload.DailyWater == nil {
+			break
+		}
+
+		return e.complexity.UserAccountPayload.DailyWater(childComplexity), true
+
+	case "UserAccountPayload.height":
+		if e.complexity.UserAccountPayload.Height == nil {
+			break
+		}
+
+		return e.complexity.UserAccountPayload.Height(childComplexity), true
+
+	case "UserAccountPayload.pressure":
+		if e.complexity.UserAccountPayload.Pressure == nil {
+			break
+		}
+
+		return e.complexity.UserAccountPayload.Pressure(childComplexity), true
+
+	case "UserAccountPayload.pulse":
+		if e.complexity.UserAccountPayload.Pulse == nil {
+			break
+		}
+
+		return e.complexity.UserAccountPayload.Pulse(childComplexity), true
+
 	case "UserAccountPayload.username":
 		if e.complexity.UserAccountPayload.Username == nil {
 			break
 		}
 
 		return e.complexity.UserAccountPayload.Username(childComplexity), true
+
+	case "UserAccountPayload.weight":
+		if e.complexity.UserAccountPayload.Weight == nil {
+			break
+		}
+
+		return e.complexity.UserAccountPayload.Weight(childComplexity), true
 
 	}
 	return 0, false
@@ -159,6 +229,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputAuthData,
+		ec.unmarshalInputUpdateUserHealthDataInput,
 		ec.unmarshalInputUserAccountData,
 	)
 	first := true
@@ -298,6 +369,21 @@ func (ec *executionContext) field_Mutation_signUp_args(ctx context.Context, rawA
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 		arg0, err = ec.unmarshalNAuthData2githubᚗcomᚋpeygyᚋmedappᚋinternalᚋservicesᚋgraphqlᚋgraphᚋmodelᚐAuthData(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateUserHealthData_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UpdateUserHealthDataInput
+	if tmp, ok := rawArgs["input"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+		arg0, err = ec.unmarshalNUpdateUserHealthDataInput2githubᚗcomᚋpeygyᚋmedappᚋinternalᚋservicesᚋgraphqlᚋgraphᚋmodelᚐUpdateUserHealthDataInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -584,6 +670,79 @@ func (ec *executionContext) fieldContext_Mutation_signIn(ctx context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_updateUserHealthData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateUserHealthData(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateUserHealthData(rctx, fc.Args["input"].(model.UpdateUserHealthDataInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.UserAccountPayload)
+	fc.Result = res
+	return ec.marshalNUserAccountPayload2ᚖgithubᚗcomᚋpeygyᚋmedappᚋinternalᚋservicesᚋgraphqlᚋgraphᚋmodelᚐUserAccountPayload(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateUserHealthData(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "username":
+				return ec.fieldContext_UserAccountPayload_username(ctx, field)
+			case "age":
+				return ec.fieldContext_UserAccountPayload_age(ctx, field)
+			case "height":
+				return ec.fieldContext_UserAccountPayload_height(ctx, field)
+			case "weight":
+				return ec.fieldContext_UserAccountPayload_weight(ctx, field)
+			case "pulse":
+				return ec.fieldContext_UserAccountPayload_pulse(ctx, field)
+			case "pressure":
+				return ec.fieldContext_UserAccountPayload_pressure(ctx, field)
+			case "dailyWater":
+				return ec.fieldContext_UserAccountPayload_dailyWater(ctx, field)
+			case "bodyMassIndex":
+				return ec.fieldContext_UserAccountPayload_bodyMassIndex(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserAccountPayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateUserHealthData_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_getUserInfo(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_getUserInfo(ctx, field)
 	if err != nil {
@@ -625,6 +784,20 @@ func (ec *executionContext) fieldContext_Query_getUserInfo(ctx context.Context, 
 			switch field.Name {
 			case "username":
 				return ec.fieldContext_UserAccountPayload_username(ctx, field)
+			case "age":
+				return ec.fieldContext_UserAccountPayload_age(ctx, field)
+			case "height":
+				return ec.fieldContext_UserAccountPayload_height(ctx, field)
+			case "weight":
+				return ec.fieldContext_UserAccountPayload_weight(ctx, field)
+			case "pulse":
+				return ec.fieldContext_UserAccountPayload_pulse(ctx, field)
+			case "pressure":
+				return ec.fieldContext_UserAccountPayload_pressure(ctx, field)
+			case "dailyWater":
+				return ec.fieldContext_UserAccountPayload_dailyWater(ctx, field)
+			case "bodyMassIndex":
+				return ec.fieldContext_UserAccountPayload_bodyMassIndex(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserAccountPayload", field.Name)
 		},
@@ -811,6 +984,308 @@ func (ec *executionContext) fieldContext_UserAccountPayload_username(_ context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserAccountPayload_age(ctx context.Context, field graphql.CollectedField, obj *model.UserAccountPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccountPayload_age(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Age, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserAccountPayload_age(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserAccountPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserAccountPayload_height(ctx context.Context, field graphql.CollectedField, obj *model.UserAccountPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccountPayload_height(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Height, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserAccountPayload_height(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserAccountPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserAccountPayload_weight(ctx context.Context, field graphql.CollectedField, obj *model.UserAccountPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccountPayload_weight(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Weight, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserAccountPayload_weight(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserAccountPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserAccountPayload_pulse(ctx context.Context, field graphql.CollectedField, obj *model.UserAccountPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccountPayload_pulse(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pulse, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserAccountPayload_pulse(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserAccountPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserAccountPayload_pressure(ctx context.Context, field graphql.CollectedField, obj *model.UserAccountPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccountPayload_pressure(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Pressure, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserAccountPayload_pressure(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserAccountPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserAccountPayload_dailyWater(ctx context.Context, field graphql.CollectedField, obj *model.UserAccountPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccountPayload_dailyWater(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DailyWater, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserAccountPayload_dailyWater(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserAccountPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserAccountPayload_bodyMassIndex(ctx context.Context, field graphql.CollectedField, obj *model.UserAccountPayload) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserAccountPayload_bodyMassIndex(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BodyMassIndex, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserAccountPayload_bodyMassIndex(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserAccountPayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2623,6 +3098,68 @@ func (ec *executionContext) unmarshalInputAuthData(ctx context.Context, obj inte
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateUserHealthDataInput(ctx context.Context, obj interface{}) (model.UpdateUserHealthDataInput, error) {
+	var it model.UpdateUserHealthDataInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"userId", "age", "height", "weight", "pulse", "pressure"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "userId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		case "age":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("age"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Age = data
+		case "height":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("height"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Height = data
+		case "weight":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("weight"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Weight = data
+		case "pulse":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pulse"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Pulse = data
+		case "pressure":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pressure"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Pressure = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUserAccountData(ctx context.Context, obj interface{}) (model.UserAccountData, error) {
 	var it model.UserAccountData
 	asMap := map[string]interface{}{}
@@ -2731,6 +3268,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "signIn":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_signIn(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateUserHealthData":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateUserHealthData(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -2846,6 +3390,35 @@ func (ec *executionContext) _UserAccountPayload(ctx context.Context, sel ast.Sel
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "age":
+			out.Values[i] = ec._UserAccountPayload_age(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "height":
+			out.Values[i] = ec._UserAccountPayload_height(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "weight":
+			out.Values[i] = ec._UserAccountPayload_weight(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pulse":
+			out.Values[i] = ec._UserAccountPayload_pulse(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pressure":
+			out.Values[i] = ec._UserAccountPayload_pressure(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "dailyWater":
+			out.Values[i] = ec._UserAccountPayload_dailyWater(ctx, field, obj)
+		case "bodyMassIndex":
+			out.Values[i] = ec._UserAccountPayload_bodyMassIndex(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3229,6 +3802,36 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloatContext(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return graphql.WrapContextMarshaler(ctx, res)
+}
+
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -3242,6 +3845,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUpdateUserHealthDataInput2githubᚗcomᚋpeygyᚋmedappᚋinternalᚋservicesᚋgraphqlᚋgraphᚋmodelᚐUpdateUserHealthDataInput(ctx context.Context, v interface{}) (model.UpdateUserHealthDataInput, error) {
+	res, err := ec.unmarshalInputUpdateUserHealthDataInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNUserAccountData2githubᚗcomᚋpeygyᚋmedappᚋinternalᚋservicesᚋgraphqlᚋgraphᚋmodelᚐUserAccountData(ctx context.Context, v interface{}) (model.UserAccountData, error) {
@@ -3539,6 +4147,38 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	res := graphql.MarshalBoolean(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloatContext(*v)
+	return graphql.WrapContextMarshaler(ctx, res)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalInt(*v)
 	return res
 }
 

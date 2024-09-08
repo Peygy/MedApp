@@ -25,6 +25,7 @@ func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
 	protected.Use(middleware.AuthMiddleware())
 	{
 		protected.POST("/account", graphqlHandler(grpcPull.Services))
+		protected.POST("/account/update", graphqlHandler(grpcPull.Services))
 		protected.POST("/notes", graphqlHandler(grpcPull.Services))
 	}
 }

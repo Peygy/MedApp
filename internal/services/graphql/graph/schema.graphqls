@@ -1,6 +1,7 @@
 type Mutation {
   signUp(input: AuthData!): AuthPayload!
   signIn(input: AuthData!): AuthPayload!
+  updateUserHealthData(input: UpdateUserHealthDataInput!): UserAccountPayload!
 }
 
 type Query {
@@ -11,8 +12,24 @@ input UserAccountData {
   userId: String!
 }
 
+input UpdateUserHealthDataInput {
+  userId: String!
+  age: Int
+  height: Float
+  weight: Float
+  pulse: Int
+  pressure: String
+}
+
 type UserAccountPayload {
   username: String!
+  age: Int!
+  height: Float!
+  weight: Float!
+  pulse: Int!
+  pressure: String!
+  dailyWater: Float
+  bodyMassIndex: Float
 }
 
 input AuthData {

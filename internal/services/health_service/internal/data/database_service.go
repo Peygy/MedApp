@@ -25,6 +25,6 @@ func InitDatabaseSchema(db *sql.DB, log logger.ILogger) error {
 		return errors.New("data: can't creates tables in the database")
 	}
 
-	log.Info("Tables users, roles, users_roles created successfully")
+	log.Info("Tables users_health_data successfully")
 	return nil
 }
