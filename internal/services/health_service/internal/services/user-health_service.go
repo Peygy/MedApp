@@ -3,7 +3,6 @@ package services
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/peygy/medapp/internal/pkg/logger"
 )
@@ -73,8 +72,6 @@ func (hs *healthService) GetHealthDataByUserId(userId string) (HealthData, error
 		return healthData, errors.New("health-services: can't gets a health data from database")
 	}
 
-	fmt.Printf("%+v\n", healthData)
-
 	hs.log.Infof("User (%s) health data getted successfully", userId)
 	return healthData, nil
 }
@@ -114,8 +111,6 @@ func (hs *healthService) UpdateHealthDataByUserId(userId string, healthData Heal
 		hs.log.Errorf("Can't update health data for user (%s) in the database: %v", userId, err)
 		return healthData, errors.New("health-services: can't update health data in the database")
 	}
-
-	fmt.Printf("%+v\n", healthData)
 
 	hs.log.Infof("User (%s) health data updated successfully", userId)
 	return healthData, nil

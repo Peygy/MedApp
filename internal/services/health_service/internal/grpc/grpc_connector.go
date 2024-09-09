@@ -2,7 +2,6 @@ package grpc
 
 import (
 	"context"
-	"math"
 
 	"github.com/peygy/medapp/internal/pkg/grpc"
 	"github.com/peygy/medapp/internal/pkg/logger"
@@ -31,22 +30,19 @@ type grpcServer struct {
 }
 
 func calcDailyWater(weight float32) float32 {
-	return roundFloat(weight * 3)
+	return weight * 3
 }
 
 func calcBodyMassIndex(weight float32, height float32) float32 {
 	height /= 100
-	return roundFloat(weight / (height * height))
-}
-
-func roundFloat(val float32) float32 {
-	return float32(math.Round(float64(val)*10) / 10)
+	return weight / (height * height)
 }
 
 func (s *grpcServer) GetHealthData(ctx context.Context, in *pb.GetHealthDataRequest) (*pb.HealthDataResponce, error) {
 	if err := s.healthService.InsertHealthData(in.UserId); err != nil {
 		return nil, err
 	}
+	// consume message
 
 	healthData, err := s.healthService.GetHealthDataByUserId(in.UserId)
 	if err != nil {

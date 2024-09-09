@@ -32,6 +32,10 @@ const UPDATE_USER_HEALTH_DATA_MUTATION = gql`
   }
 `;
 
+const roundToOneDecimal = (value) => {
+  return value ? Math.round(value * 10) / 10 : value;
+};
+
 function Account() {
   const userId = Cookies.get('userId');
   const { data, loading, error } = useQuery(GET_USER_INFO_QUERY, {
@@ -55,7 +59,7 @@ function Account() {
     const { name, value } = e.target;
     setFormState({
       ...formState,
-      [name]: value ? parseFloat(value) : '',
+      [name]: value ? roundToOneDecimal(parseFloat(value)) : '',
     });
   };
 
@@ -68,11 +72,11 @@ function Account() {
     // Заполняем пропущенные данные из основного блока
     const input = {
       userId,
-      age: formState.age !== undefined ? formState.age : defaultData.age,
-      height: formState.height !== undefined ? formState.height : defaultData.height,
-      weight: formState.weight !== undefined ? formState.weight : defaultData.weight,
-      pulse: formState.pulse !== undefined ? formState.pulse : defaultData.pulse,
-      pressure: formState.pressure !== undefined ? formState.pressure : defaultData.pressure,
+      age: formState.age !== undefined ? formState.age : roundToOneDecimal(defaultData.age),
+      height: formState.height !== undefined ? formState.height : roundToOneDecimal(defaultData.height),
+      weight: formState.weight !== undefined ? formState.weight : roundToOneDecimal(defaultData.weight),
+      pulse: formState.pulse !== undefined ? formState.pulse : roundToOneDecimal(defaultData.pulse),
+      pressure: formState.pressure !== undefined ? formState.pressure : roundToOneDecimal(defaultData.pressure),
     };
 
     console.log('Submitting:', input);
@@ -105,18 +109,18 @@ function Account() {
     <div>
       <h1>Account</h1>
       <p>Username: {username}</p>
-      <p>Age: {displayValue(age)}</p>
-      <p>Height: {displayValue(height)}</p>
-      <p>Weight: {displayValue(weight)}</p>
-      <p>Pulse: {displayValue(pulse)}</p>
-      <p>Pressure: {displayValue(pressure)}</p>
+      <p>Age: {displayValue(roundToOneDecimal(age))}</p>
+      <p>Height: {displayValue(roundToOneDecimal(height))}</p>
+      <p>Weight: {displayValue(roundToOneDecimal(weight))}</p>
+      <p>Pulse: {displayValue(roundToOneDecimal(pulse))}</p>
+      <p>Pressure: {displayValue(roundToOneDecimal(pressure))}</p>
       <p>
-        Daily Water: {weight ? displayValue(dailyWater, 'Требуется вес') : 'Требуется вес'}
+        Daily Water: {weight ? displayValue(roundToOneDecimal(dailyWater), 'Требуется вес') : 'Требуется вес'}
       </p>
       <p>
         Body Mass Index:{' '}
         {weight && height
-          ? displayValue(bodyMassIndex, 'Требуются вес и рост')
+          ? displayValue(roundToOneDecimal(bodyMassIndex), 'Требуются вес и рост')
           : 'Требуются вес и рост'}
       </p>
 

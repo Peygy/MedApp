@@ -58,6 +58,7 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.UserRequest) (*pb.AuthRe
 		return nil, err
 	}
 
+	// publish message
 	return &pb.AuthResponce{UserId: userId, Role: userRole}, nil
 }
 
