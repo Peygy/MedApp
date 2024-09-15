@@ -1,0 +1,17 @@
+grpc-server:
+  port: ":5102"
+  host: ""
+
+database:
+  host: "health_service-db"
+  port: 5432
+  user: "postgres"
+  password: "postgres"
+  dbname: "healthdb"
+
+rabbitmq:
+  queueName: "auth_health"
+  host: "rabbitmq"
+  port: 5672
+  user: "user"
+  password: "password"

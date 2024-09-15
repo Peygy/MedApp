@@ -2,23 +2,32 @@ type Mutation {
   signUp(input: AuthData!): AuthPayload!
   signIn(input: AuthData!): AuthPayload!
   updateUserHealthData(input: UpdateUserHealthDataInput!): UserAccountPayload!
+
+  addVisitRecord(input: AddVisitRecordInput!): Boolean!
 }
 
 type Query {
   getUserInfo(input: UserAccountData!): UserAccountPayload!
+  getUserVisitRecords(input: UserAccountData!): [VisitRecord!]!
+  
+  getDoctors: [Doctor!]!
+}
+
+type Doctor {
+  doctorId: String!
+  doctorName: String!
+  specialization: String!
+}
+
+type VisitRecord {
+  recordNumber: Int!
+  doctorName: String!
+  specialization: String!
+  visitDate: String!
 }
 
 input UserAccountData {
   userId: String!
-}
-
-input UpdateUserHealthDataInput {
-  userId: String!
-  age: Int
-  height: Float
-  weight: Float
-  pulse: Int
-  pressure: String
 }
 
 type UserAccountPayload {
@@ -32,12 +41,27 @@ type UserAccountPayload {
   bodyMassIndex: Float
 }
 
-input AuthData {
-  username: String!
-  password: String!
+input UpdateUserHealthDataInput {
+  userId: String!
+  age: Int
+  height: Float
+  weight: Float
+  pulse: Int
+  pressure: String
 }
 
 type AuthPayload {
   userId: String!
   role: String!
+}
+
+input AuthData {
+  username: String!
+  password: String!
+}
+
+input AddVisitRecordInput {
+  userId: String!
+  doctorId: String!
+  visitDate: String!
 }

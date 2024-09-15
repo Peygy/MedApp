@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/lib/pq v1.10.9
-	github.com/peygy/medapp/internal/pkg v0.0.0-20240915163539-f17bbfd0d628
+	github.com/peygy/medapp/internal/pkg v0.0.0-20240915173912-90669a2713c6
 	go.uber.org/fx v1.22.2
 )
 

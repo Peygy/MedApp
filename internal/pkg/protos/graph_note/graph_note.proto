@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = "./;graph_note";
+
+package graph_note;
+
+message AddVisitRecordRequest {
+  string userId = 1;
+  string doctorName = 2;
+  string visitDate = 3;
+}
+
+message AddVisitRecordResponse {
+  bool success = 1;
+}
+
+message GetUserVisitRecordsRequest {
+  string userId = 1;
+}
+
+message GetUserVisitRecordsResponse {
+  repeated VisitRecord visitRecords = 1;
+}
+
+message VisitRecord {
+  string recordNumber = 1;
+  string doctorName = 2;
+  string specialization = 3;
+  string visitDate = 4;
+}
+
+service VisitService {
+  rpc AddVisitRecord (AddVisitRecordRequest) returns (AddVisitRecordResponse);
+  rpc GetUserVisitRecords (GetUserVisitRecordsRequest) returns (GetUserVisitRecordsResponse);
+}
+//protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/graph_note/graph_note.proto

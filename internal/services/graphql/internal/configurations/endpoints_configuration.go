@@ -16,7 +16,7 @@ func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
 		AllowMethods:     []string{"GET", "POST"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
-	  }))
+	}))
 
 	eng.Engine.POST("/graphql/signup", graphqlHandler(grpcPull.Services))
 	eng.Engine.POST("/graphql/signin", graphqlHandler(grpcPull.Services))
@@ -26,6 +26,8 @@ func InitEndpoints(eng *ginServer.GinServer, grpcPull *grpc.GrpcPull) {
 	{
 		protected.POST("/account", graphqlHandler(grpcPull.Services))
 		protected.POST("/account/update", graphqlHandler(grpcPull.Services))
+		protected.POST("/account/notes", graphqlHandler(grpcPull.Services))
+
 		protected.POST("/notes", graphqlHandler(grpcPull.Services))
 	}
 }

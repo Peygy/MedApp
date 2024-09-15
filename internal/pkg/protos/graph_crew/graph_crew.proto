@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "./;graph_crew";
+
+package graph_crew;
+
+message GetDoctorsRequest { }
+
+message GetDoctorsResponse {
+  repeated Doctor doctors = 1;
+}
+
+message Doctor {
+  string doctorId = 1;
+  string doctorName = 2;
+  string specialization = 3;
+  int32 experienceYears = 4;
+}
+
+service CrewService {
+    rpc GetDoctors (GetDoctorsRequest) returns (GetDoctorsResponse);
+}
+//protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/graph_crew/graph_crew.proto

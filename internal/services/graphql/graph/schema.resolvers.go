@@ -95,6 +95,14 @@ func (r *mutationResolver) UpdateUserHealthData(ctx context.Context, input model
 	}, nil
 }
 
+// AddVisitRecord is the resolver for the addVisitRecord field.
+func (r *mutationResolver) AddVisitRecord(ctx context.Context, input model.AddVisitRecordInput) (bool, error) {
+	noteConnIdx := findServiceIndex(r.GrpcServices, "note_service")
+	noteClient := pbHealth.NewHealthServiceClient(r.GrpcServices[noteConnIdx].Conn)
+
+	panic(fmt.Errorf("not implemented: AddVisitRecord - addVisitRecord"))
+}
+
 // GetUserInfo is the resolver for the getUserInfo field.
 func (r *queryResolver) GetUserInfo(ctx context.Context, input model.UserAccountData) (*model.UserAccountPayload, error) {
 	authConnIdx := findServiceIndex(r.GrpcServices, "auth_service")
@@ -130,6 +138,22 @@ func (r *queryResolver) GetUserInfo(ctx context.Context, input model.UserAccount
 	}, nil
 }
 
+// GetUserVisitRecords is the resolver for the getUserVisitRecords field.
+func (r *queryResolver) GetUserVisitRecords(ctx context.Context, input model.UserAccountData) ([]*model.VisitRecord, error) {
+	noteConnIdx := findServiceIndex(r.GrpcServices, "note_service")
+	noteClient := pbHealth.NewHealthServiceClient(r.GrpcServices[noteConnIdx].Conn)
+
+	panic(fmt.Errorf("not implemented: GetUserVisitRecords - getUserVisitRecords"))
+}
+
+// GetDoctors is the resolver for the getDoctors field.
+func (r *queryResolver) GetDoctors(ctx context.Context) ([]*model.Doctor, error) {
+	crewConnIdx := findServiceIndex(r.GrpcServices, "crew_service")
+	crewClient := pbHealth.NewHealthServiceClient(r.GrpcServices[crewConnIdx].Conn)
+
+	panic(fmt.Errorf("not implemented: GetDoctors - getDoctors"))
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
@@ -153,7 +177,6 @@ func findServiceIndex(services []grpc.GrpcService, name string) int {
 	}
 	return -1
 }
-
 func toFloat64Pointer(value float32) *float64 {
 	if math.IsNaN(float64(value)) || math.IsInf(float64(value), 0) {
 		return nil

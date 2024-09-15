@@ -2,6 +2,12 @@
 
 package model
 
+type AddVisitRecordInput struct {
+	UserID    string `json:"userId"`
+	DoctorID  string `json:"doctorId"`
+	VisitDate string `json:"visitDate"`
+}
+
 type AuthData struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -10,6 +16,12 @@ type AuthData struct {
 type AuthPayload struct {
 	UserID string `json:"userId"`
 	Role   string `json:"role"`
+}
+
+type Doctor struct {
+	DoctorID       string `json:"doctorId"`
+	DoctorName     string `json:"doctorName"`
+	Specialization string `json:"specialization"`
 }
 
 type Mutation struct {
@@ -40,4 +52,11 @@ type UserAccountPayload struct {
 	Pressure      string   `json:"pressure"`
 	DailyWater    *float64 `json:"dailyWater,omitempty"`
 	BodyMassIndex *float64 `json:"bodyMassIndex,omitempty"`
+}
+
+type VisitRecord struct {
+	RecordNumber   int    `json:"recordNumber"`
+	DoctorName     string `json:"doctorName"`
+	Specialization string `json:"specialization"`
+	VisitDate      string `json:"visitDate"`
 }

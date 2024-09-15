@@ -3,7 +3,7 @@ module github.com/peygy/medapp/internal/pkg
 go 1.23
 
 require (
-	google.golang.org/grpc v1.66.1
+	google.golang.org/grpc v1.66.2
 	gopkg.in/yaml.v3 v3.0.1
 )
 
