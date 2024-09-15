@@ -42,7 +42,6 @@ func (s *grpcServer) GetHealthData(ctx context.Context, in *pb.GetHealthDataRequ
 	if err := s.healthService.InsertHealthData(in.UserId); err != nil {
 		return nil, err
 	}
-	// consume message
 
 	healthData, err := s.healthService.GetHealthDataByUserId(in.UserId)
 	if err != nil {

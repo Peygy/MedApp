@@ -6,6 +6,7 @@ import (
 	"github.com/peygy/medapp/internal/pkg/grpc"
 	"github.com/peygy/medapp/internal/pkg/logger"
 	pb "github.com/peygy/medapp/internal/pkg/protos/graph_auth"
+	"github.com/peygy/medapp/internal/pkg/rabbitmq"
 	"github.com/peygy/medapp/internal/services/auth_service/internal/managers"
 )
 
@@ -14,11 +15,14 @@ func InitAuthGrpcServer(
 	passwordManager managers.IPasswordManager,
 	roleManager managers.IRoleManager,
 	userManager managers.IUserManager,
-	logger logger.ILogger) {
+	rabbitMQServer rabbitmq.IRabbitMQServer,
+	logger logger.ILogger,
+) {
 	grpcServer := &grpcServer{
 		passwordManager: passwordManager,
 		roleManager:     roleManager,
 		userManager:     userManager,
+		rabbitMQServer:  rabbitMQServer,
 		log:             logger,
 	}
 	pb.RegisterAuthServiceServer(server.Engine, grpcServer)
@@ -32,6 +36,7 @@ type grpcServer struct {
 	passwordManager managers.IPasswordManager
 	roleManager     managers.IRoleManager
 	userManager     managers.IUserManager
+	rabbitMQServer  rabbitmq.IRabbitMQServer
 
 	log logger.ILogger
 }
@@ -59,6 +64,14 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.UserRequest) (*pb.AuthRe
 	}
 
 	// publish message
+	message := struct {
+		UserId string `json:"userId"`
+	}{UserId: userId}
+
+	if err := s.rabbitMQServer.(message); err != nil {
+		return nil, err
+	}
+
 	return &pb.AuthResponce{UserId: userId, Role: userRole}, nil
 }
 

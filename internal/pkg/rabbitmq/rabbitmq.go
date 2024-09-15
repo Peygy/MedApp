@@ -2,6 +2,7 @@ package rabbitmq
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/peygy/medapp/internal/pkg/logger"
@@ -9,6 +10,9 @@ import (
 )
 
 type IRabbitMQServer interface {
+	PublishMessage(message interface{}) error
+	ConsumeMessages(handler func(message json.RawMessage)) error
+
 	Run(ctx context.Context) error
 }
 
@@ -69,10 +73,10 @@ func NewRabbitMQConnection(cfg *RabbitMQConfig, log logger.ILogger) (IRabbitMQSe
 func (r *rabbitMQServer) Run(ctx context.Context) error {
 	go func() {
 		<-ctx.Done()
-		r.log.Info("Shutting down RabbitMQ")
+		r.log.Info("Shutting down RabbitMQ channel")
 		r.channel.Close()
 		r.conn.Close()
-		r.log.Info("RabbitMQ exited properly")
+		r.log.Info("RabbitMQ channel exited properly")
 	}()
 
 	return nil
