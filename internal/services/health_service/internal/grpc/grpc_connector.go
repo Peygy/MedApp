@@ -39,10 +39,6 @@ func calcBodyMassIndex(weight float32, height float32) float32 {
 }
 
 func (s *grpcServer) GetHealthData(ctx context.Context, in *pb.GetHealthDataRequest) (*pb.HealthDataResponce, error) {
-	if err := s.healthService.InsertHealthData(in.UserId); err != nil {
-		return nil, err
-	}
-
 	healthData, err := s.healthService.GetHealthDataByUserId(in.UserId)
 	if err != nil {
 		return nil, err

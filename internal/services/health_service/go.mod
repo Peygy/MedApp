@@ -4,11 +4,12 @@ go 1.23.0
 
 require (
 	github.com/lib/pq v1.10.9
-	github.com/peygy/medapp/internal/pkg v0.0.0-20240909204223-797a950d0e09
+	github.com/peygy/medapp/internal/pkg v0.0.0-20240915163539-f17bbfd0d628
 	go.uber.org/fx v1.22.2
 )
 
 require (
+	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
 	go.uber.org/dig v1.18.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect

@@ -68,7 +68,7 @@ func (s *grpcServer) SignUp(ctx context.Context, in *pb.UserRequest) (*pb.AuthRe
 		UserId string `json:"userId"`
 	}{UserId: userId}
 
-	if err := s.rabbitMQServer.(message); err != nil {
+	if err := s.rabbitMQServer.PublishMessage(message); err != nil {
 		return nil, err
 	}
 

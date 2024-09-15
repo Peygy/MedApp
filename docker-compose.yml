@@ -24,6 +24,7 @@ services:
       - "5101:5101"
     depends_on:
       - auth_service-db
+      - rabbitmq
     networks:
       - microservices-network
       - auth-network
@@ -47,6 +48,7 @@ services:
       - "5102:5102"
     depends_on:
       - health_service-db
+      - rabbitmq
     networks:
       - microservices-network
       - health-network
@@ -64,11 +66,27 @@ services:
     networks:
       - health-network
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - microservices-network
+
 volumes:
   auth_service-db-data:
   health_service-db-data:
+  rabbitmq_data:
 
 networks:
   microservices-network:
   auth-network:
   health-network:
+    driver: bridge

@@ -8,3 +8,10 @@ database:
   user: "postgres"
   password: "postgres"
   dbname: "healthdb"
+
+rabbitmq:
+  queueName: "auth_health"
+  host: "rabbitmq"
+  port: 5672
+  user: "user"
+  password: "password"
