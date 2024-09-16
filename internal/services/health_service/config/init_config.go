@@ -15,7 +15,7 @@ type HealthConfig struct {
 	RabbitMQConfig *rabbitmq.RabbitMQConfig `yaml:"rabbitmq"`
 }
 
-func NewAuthConfig() (*HealthConfig, *grpc.GrpcServerConfig, *postgres.PostgresConfig, *rabbitmq.RabbitMQConfig, error) {
+func NewHealthConfig() (*HealthConfig, *grpc.GrpcServerConfig, *postgres.PostgresConfig, *rabbitmq.RabbitMQConfig, error) {
 	cfg, err := config.NewConfig[HealthConfig](configPath)
 	if err != nil {
 		return nil, nil, nil, nil, err

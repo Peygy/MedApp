@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/99designs/gqlgen v0.17.49
 	github.com/gin-gonic/gin v1.10.0
-	github.com/peygy/medapp/internal/pkg v0.0.0-20240915173912-90669a2713c6
+	github.com/peygy/medapp/internal/pkg v0.0.0-20240915200241-0f2cd3be5015
 	github.com/vektah/gqlparser/v2 v2.5.16
 )
 

@@ -7,32 +7,28 @@ import (
 	"github.com/peygy/medapp/internal/pkg/database/postgres"
 	"github.com/peygy/medapp/internal/pkg/grpc"
 	"github.com/peygy/medapp/internal/pkg/logger"
-	"github.com/peygy/medapp/internal/pkg/rabbitmq"
 
-	"github.com/peygy/medapp/internal/services/health_service/config"
-	"github.com/peygy/medapp/internal/services/health_service/internal/consumer"
-	"github.com/peygy/medapp/internal/services/health_service/internal/data"
-	grpcConn "github.com/peygy/medapp/internal/services/health_service/internal/grpc"
-	"github.com/peygy/medapp/internal/services/health_service/internal/services"
-	"github.com/peygy/medapp/internal/services/health_service/server"
+	"github.com/peygy/medapp/internal/services/note_service/config"
+	"github.com/peygy/medapp/internal/services/note_service/internal/data"
+	grpcConn "github.com/peygy/medapp/internal/services/note_service/internal/grpc"
+	"github.com/peygy/medapp/internal/services/note_service/internal/services"
+	"github.com/peygy/medapp/internal/services/note_service/server"
 )
 
 func main() {
 	fx.New(
 		fx.Options(
 			fx.Provide(
-				config.NewAuthConfig,
+				config.NewNoteConfig,
 				logger.NewLogger,
 				context.NewContext,
 				grpc.NewGrpcServer,
 				postgres.NewDatabaseConnection,
 
 				services.NewHealthService,
-				rabbitmq.NewRabbitMQConnection,
-				consumer.NewConsumer,
 			),
 			fx.Invoke(data.InitDatabaseSchema),
-			fx.Invoke(grpcConn.InitHealhGrpcServer),
+			fx.Invoke(grpcConn.InitNoteGrpcServer),
 			fx.Invoke(server.RunServers),
 		),
 	).Run()

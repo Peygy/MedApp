@@ -3,9 +3,9 @@
 package model
 
 type AddVisitRecordInput struct {
-	UserID    string `json:"userId"`
-	DoctorID  string `json:"doctorId"`
-	VisitDate string `json:"visitDate"`
+	UserID     string `json:"userId"`
+	DoctorName string `json:"doctorName"`
+	VisitDate  string `json:"visitDate"`
 }
 
 type AuthData struct {
@@ -55,7 +55,7 @@ type UserAccountPayload struct {
 }
 
 type VisitRecord struct {
-	RecordNumber   int    `json:"recordNumber"`
+	RecordNumber   string `json:"recordNumber"`
 	DoctorName     string `json:"doctorName"`
 	Specialization string `json:"specialization"`
 	VisitDate      string `json:"visitDate"`

@@ -1751,9 +1751,9 @@ func (ec *executionContext) _VisitRecord_recordNumber(ctx context.Context, field
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_VisitRecord_recordNumber(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1763,7 +1763,7 @@ func (ec *executionContext) fieldContext_VisitRecord_recordNumber(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3681,7 +3681,7 @@ func (ec *executionContext) unmarshalInputAddVisitRecordInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"userId", "doctorId", "visitDate"}
+	fieldsInOrder := [...]string{"userId", "doctorName", "visitDate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3695,13 +3695,13 @@ func (ec *executionContext) unmarshalInputAddVisitRecordInput(ctx context.Contex
 				return it, err
 			}
 			it.UserID = data
-		case "doctorId":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("doctorId"))
+		case "doctorName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("doctorName"))
 			data, err := ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.DoctorID = data
+			it.DoctorName = data
 		case "visitDate":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visitDate"))
 			data, err := ec.unmarshalNString2string(ctx, v)

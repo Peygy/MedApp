@@ -11,7 +11,9 @@ import (
 
 	"github.com/peygy/medapp/internal/pkg/grpc"
 	pbAuth "github.com/peygy/medapp/internal/pkg/protos/graph_auth"
+	pbCrew "github.com/peygy/medapp/internal/pkg/protos/graph_crew"
 	pbHealth "github.com/peygy/medapp/internal/pkg/protos/graph_health"
+	pbNote "github.com/peygy/medapp/internal/pkg/protos/graph_note"
 	"github.com/peygy/medapp/internal/services/graphql/graph/model"
 )
 
@@ -98,9 +100,19 @@ func (r *mutationResolver) UpdateUserHealthData(ctx context.Context, input model
 // AddVisitRecord is the resolver for the addVisitRecord field.
 func (r *mutationResolver) AddVisitRecord(ctx context.Context, input model.AddVisitRecordInput) (bool, error) {
 	noteConnIdx := findServiceIndex(r.GrpcServices, "note_service")
-	noteClient := pbHealth.NewHealthServiceClient(r.GrpcServices[noteConnIdx].Conn)
+	noteClient := pbNote.NewVisitServiceClient(r.GrpcServices[noteConnIdx].Conn)
 
-	panic(fmt.Errorf("not implemented: AddVisitRecord - addVisitRecord"))
+	responce, err := noteClient.AddVisitRecord(ctx, &pbNote.AddVisitRecordRequest{
+		UserId:     input.UserID,
+		DoctorName: input.DoctorName,
+		VisitDate:  input.VisitDate,
+	})
+	if err != nil {
+		fmt.Print(err)
+		return false, fmt.Errorf("graphql: could not add visit for name: %v", err)
+	}
+
+	return responce.GetSuccess(), nil
 }
 
 // GetUserInfo is the resolver for the getUserInfo field.
@@ -141,17 +153,50 @@ func (r *queryResolver) GetUserInfo(ctx context.Context, input model.UserAccount
 // GetUserVisitRecords is the resolver for the getUserVisitRecords field.
 func (r *queryResolver) GetUserVisitRecords(ctx context.Context, input model.UserAccountData) ([]*model.VisitRecord, error) {
 	noteConnIdx := findServiceIndex(r.GrpcServices, "note_service")
-	noteClient := pbHealth.NewHealthServiceClient(r.GrpcServices[noteConnIdx].Conn)
+	noteClient := pbNote.NewVisitServiceClient(r.GrpcServices[noteConnIdx].Conn)
 
-	panic(fmt.Errorf("not implemented: GetUserVisitRecords - getUserVisitRecords"))
+	responce, err := noteClient.GetUserVisitRecords(ctx, &pbNote.GetUserVisitRecordsRequest{
+		UserId: input.UserID,
+	})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("graphql: could not get user personal info: %v", err)
+	}
+
+	visits := make([]*model.VisitRecord, len(responce.GetVisitRecords()))
+	for i, visit := range responce.GetVisitRecords() {
+		visits[i] = &model.VisitRecord{
+			RecordNumber:   visit.GetRecordNumber(),
+			DoctorName:     visit.GetDoctorName(),
+			Specialization: visit.GetSpecialization(),
+			VisitDate:      visit.GetVisitDate(),
+		}
+	}
+
+	return visits, nil
 }
 
 // GetDoctors is the resolver for the getDoctors field.
 func (r *queryResolver) GetDoctors(ctx context.Context) ([]*model.Doctor, error) {
 	crewConnIdx := findServiceIndex(r.GrpcServices, "crew_service")
-	crewClient := pbHealth.NewHealthServiceClient(r.GrpcServices[crewConnIdx].Conn)
+	crewClient := pbCrew.NewCrewServiceClient(r.GrpcServices[crewConnIdx].Conn)
 
-	panic(fmt.Errorf("not implemented: GetDoctors - getDoctors"))
+	responce, err := crewClient.GetDoctors(ctx, &pbCrew.GetDoctorsRequest{})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("graphql: could not get list of doctors: %v", err)
+	}
+
+	doctors := make([]*model.Doctor, len(responce.GetDoctors()))
+	for i, doc := range responce.GetDoctors() {
+		doctors[i] = &model.Doctor{
+			DoctorID:       doc.GetDoctorId(),
+			DoctorName:     doc.GetDoctorName(),
+			Specialization: doc.GetSpecialization(),
+		}
+	}
+
+	return doctors, nil
 }
 
 // Mutation returns MutationResolver implementation.

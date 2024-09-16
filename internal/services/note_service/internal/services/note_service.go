@@ -8,25 +8,24 @@ import (
 )
 
 type HealthData struct {
-	Age      int32
-	Height   float32
-	Weight   float32
-	Pulse    int32
-	Pressure string
+	userId      int32
+	doctor_name float32
+	visit_date  float32
+	Pulse       int32
+	Pressure    string
 }
 
-type IHealthService interface {
-	InsertHealthData(userId string) error
-	GetHealthDataByUserId(userId string) (HealthData, error)
-	UpdateHealthDataByUserId(userId string, healthData HealthData) (HealthData, error)
+type INoteService interface {
+	InsertUserNote(userId string) error
+	GetUserNotes(userId string) (HealthData, error)
 }
 
-type healthService struct {
+type noteService struct {
 	db  *sql.DB
 	log logger.ILogger
 }
 
-func NewHealthService(db *sql.DB, log logger.ILogger) IHealthService {
+func NewHealthService(db *sql.DB, log logger.ILogger) INoteService {
 	log.Info("HealthService created")
 	return &healthService{
 		db:  db,

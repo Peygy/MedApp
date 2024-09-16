@@ -21,7 +21,7 @@ func main() {
 	fx.New(
 		fx.Options(
 			fx.Provide(
-				config.NewAuthConfig,
+				config.NewHealthConfig,
 				logger.NewLogger,
 				context.NewContext,
 				grpc.NewGrpcServer,

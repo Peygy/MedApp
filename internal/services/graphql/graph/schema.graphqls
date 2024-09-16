@@ -20,7 +20,7 @@ type Doctor {
 }
 
 type VisitRecord {
-  recordNumber: Int!
+  recordNumber: String!
   doctorName: String!
   specialization: String!
   visitDate: String!
@@ -62,6 +62,6 @@ input AuthData {
 
 input AddVisitRecordInput {
   userId: String!
-  doctorId: String!
+  doctorName: String!
   visitDate: String!
 }
