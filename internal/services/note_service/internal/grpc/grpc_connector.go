@@ -30,43 +30,34 @@ type grpcServer struct {
 }
 
 func (s *grpcServer) AddVisitRecord(ctx context.Context, in *pb.AddVisitRecordRequest) (*pb.AddVisitRecordResponse, error) {
-	healthData, err := s.noteService.InsertUserNote(in.UserId)
+	err := s.noteService.InsertUserNote(in.UserId, in.DoctorName, in.Specialization, in.VisitDate)
 	if err != nil {
 		return nil, err
 	}
 
 	return &pb.AddVisitRecordResponse{
-		Age:           healthData.Age,
-		Height:        healthData.Height,
-		Weight:        healthData.Weight,
-		Pulse:         healthData.Pulse,
-		Pressure:      healthData.Pressure,
-		DailyWater:    calcDailyWater(healthData.Weight),
-		BodyMassIndex: calcBodyMassIndex(healthData.Weight, healthData.Height),
+		Success: true,
 	}, nil
 }
 
 func (s *grpcServer) GetUserVisitRecords(ctx context.Context, in *pb.GetUserVisitRecordsRequest) (*pb.GetUserVisitRecordsResponse, error) {
-	oldHealthData := services.HealthData{
-		Age:      in.Age,
-		Height:   in.Height,
-		Weight:   in.Weight,
-		Pulse:    in.Pulse,
-		Pressure: in.Pressure,
-	}
-
-	healthData, err := s.noteService.GetUserNotes(in.UserId, oldHealthData)
+	noteData, err := s.noteService.GetUserNotes(in.UserId)
 	if err != nil {
 		return nil, err
 	}
 
+	var visitRecords []*pb.VisitRecord
+	for _, note := range noteData {
+		visitRecord := &pb.VisitRecord{
+			RecordNumber:   note.Id,
+			DoctorName:     note.Doctor_name,
+			Specialization: note.Specialization,
+			VisitDate:      note.Visit_date,
+		}
+		visitRecords = append(visitRecords, visitRecord)
+	}
+
 	return &pb.GetUserVisitRecordsResponse{
-		Age:           healthData.Age,
-		Height:        healthData.Height,
-		Weight:        healthData.Weight,
-		Pulse:         healthData.Pulse,
-		Pressure:      healthData.Pressure,
-		DailyWater:    calcDailyWater(healthData.Weight),
-		BodyMassIndex: calcBodyMassIndex(healthData.Weight, healthData.Height),
+		VisitRecords: visitRecords,
 	}, nil
 }

@@ -25,7 +25,7 @@ func main() {
 				grpc.NewGrpcServer,
 				postgres.NewDatabaseConnection,
 
-				services.NewHealthService,
+				services.NewNoteService,
 			),
 			fx.Invoke(data.InitDatabaseSchema),
 			fx.Invoke(grpcConn.InitNoteGrpcServer),

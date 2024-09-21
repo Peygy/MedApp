@@ -4,22 +4,20 @@ import (
 	"github.com/peygy/medapp/internal/pkg/config"
 	"github.com/peygy/medapp/internal/pkg/database/postgres"
 	"github.com/peygy/medapp/internal/pkg/grpc"
-	"github.com/peygy/medapp/internal/pkg/rabbitmq"
 )
 
 const configPath = "./config/config.dev.yml"
 
-type HealthConfig struct {
+type CrewConfig struct {
 	GrpcServer     *grpc.GrpcServerConfig   `yaml:"grpc-server"`
 	DatabaseConfig *postgres.PostgresConfig `yaml:"database"`
-	RabbitMQConfig *rabbitmq.RabbitMQConfig `yaml:"rabbitmq"`
 }
 
-func NewAuthConfig() (*HealthConfig, *grpc.GrpcServerConfig, *postgres.PostgresConfig, *rabbitmq.RabbitMQConfig, error) {
-	cfg, err := config.NewConfig[HealthConfig](configPath)
+func NewCrewConfig() (*CrewConfig, *grpc.GrpcServerConfig, *postgres.PostgresConfig, error) {
+	cfg, err := config.NewConfig[CrewConfig](configPath)
 	if err != nil {
-		return nil, nil, nil, nil, err
+		return nil, nil, nil, err
 	}
 
-	return cfg, cfg.GrpcServer, cfg.DatabaseConfig, cfg.RabbitMQConfig, nil
+	return cfg, cfg.GrpcServer, cfg.DatabaseConfig, nil
 }

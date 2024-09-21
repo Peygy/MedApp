@@ -7,7 +7,8 @@ package graph_note;
 message AddVisitRecordRequest {
   string userId = 1;
   string doctorName = 2;
-  string visitDate = 3;
+  string specialization = 3;
+  string visitDate = 4;
 }
 
 message AddVisitRecordResponse {

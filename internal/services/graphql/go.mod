@@ -3,9 +3,9 @@ module github.com/peygy/medapp/internal/services/graphql
 go 1.23
 
 require (
-	github.com/99designs/gqlgen v0.17.49
+	github.com/99designs/gqlgen v0.17.54
 	github.com/gin-gonic/gin v1.10.0
-	github.com/peygy/medapp/internal/pkg v0.0.0-20240915200241-0f2cd3be5015
+	github.com/peygy/medapp/internal/pkg v0.0.0-20240916203235-7b5e31b7d4f7
 	github.com/vektah/gqlparser/v2 v2.5.16
 )
 
@@ -14,7 +14,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1 // indirect
-	google.golang.org/grpc v1.66.2 // indirect
+	google.golang.org/grpc v1.67.0 // indirect
 )
 
 require (

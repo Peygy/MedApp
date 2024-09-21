@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS appointments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     userId VARCHAR(100) NOT NULL,
     doctor_name VARCHAR(100) NOT NULL,
+    specialization VARCHAR(100) NOT NULL,
     visit_date TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
