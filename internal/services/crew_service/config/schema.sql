@@ -7,12 +7,3 @@ CREATE TABLE IF NOT EXISTS doctors (
     experience_years INT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO doctors (doctor_name, specialization, experience_years) 
-VALUES 
-    ('Иванов Иван Иванович', 'Кардиолог', 15),
-    ('Петров Петр Петрович', 'Невролог', 10),
-    ('Сидоров Сидор Сидорович', 'Педиатр', 8),
-    ('Кузнецов Николай Николаевич', 'Ортопед', 12),
-    ('Смирнова Анна Сергеевна', 'Дерматолог', 5)
-ON CONFLICT (specialization) DO NOTHING;

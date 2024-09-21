@@ -53,9 +53,10 @@ type ComplexityRoot struct {
 	}
 
 	Doctor struct {
-		DoctorID       func(childComplexity int) int
-		DoctorName     func(childComplexity int) int
-		Specialization func(childComplexity int) int
+		DoctorID        func(childComplexity int) int
+		DoctorName      func(childComplexity int) int
+		ExperienceYears func(childComplexity int) int
+		Specialization  func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -148,6 +149,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Doctor.DoctorName(childComplexity), true
+
+	case "Doctor.experienceYears":
+		if e.complexity.Doctor.ExperienceYears == nil {
+			break
+		}
+
+		return e.complexity.Doctor.ExperienceYears(childComplexity), true
 
 	case "Doctor.specialization":
 		if e.complexity.Doctor.Specialization == nil {
@@ -810,6 +818,50 @@ func (ec *executionContext) fieldContext_Doctor_specialization(_ context.Context
 	return fc, nil
 }
 
+func (ec *executionContext) _Doctor_experienceYears(ctx context.Context, field graphql.CollectedField, obj *model.Doctor) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Doctor_experienceYears(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ExperienceYears, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Doctor_experienceYears(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Doctor",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_signUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_signUp(ctx, field)
 	if err != nil {
@@ -1243,6 +1295,8 @@ func (ec *executionContext) fieldContext_Query_getDoctors(_ context.Context, fie
 				return ec.fieldContext_Doctor_doctorName(ctx, field)
 			case "specialization":
 				return ec.fieldContext_Doctor_specialization(ctx, field)
+			case "experienceYears":
+				return ec.fieldContext_Doctor_experienceYears(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Doctor", field.Name)
 		},
@@ -3913,6 +3967,11 @@ func (ec *executionContext) _Doctor(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "specialization":
 			out.Values[i] = ec._Doctor_specialization(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "experienceYears":
+			out.Values[i] = ec._Doctor_experienceYears(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}

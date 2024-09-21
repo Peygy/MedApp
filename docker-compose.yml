@@ -80,13 +80,63 @@ services:
     networks:
       - microservices-network
 
+  note_service:
+    build: ./internal/services/note_service
+    ports:
+      - "5103:5103"
+    depends_on:
+      - note_service-db
+    networks:
+      - microservices-network
+      - note-network
+
+  note_service-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: notedb
+    ports:
+      - "5434:5432"
+    volumes:
+      - note_service-db-data:/var/lib/postgresql/data
+    networks:
+      - note-network
+
+  crew_service:
+    build: ./internal/services/crew_service
+    ports:
+      - "5104:5104"
+    depends_on:
+      - crew_service-db
+    networks:
+      - microservices-network
+      - crew-network
+
+  crew_service-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: crewdb
+    ports:
+      - "5435:5432"
+    volumes:
+      - crew_service-db-data:/var/lib/postgresql/data
+    networks:
+      - crew-network
+
 volumes:
   auth_service-db-data:
   health_service-db-data:
+  note_service-db-data:
+  crew_service-db-data:
   rabbitmq_data:
 
 networks:
   microservices-network:
   auth-network:
+  note-network:
+  crew-network:
   health-network:
     driver: bridge

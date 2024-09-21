@@ -20,6 +20,9 @@ function Home() {
           <Link to="/account">
             <button>Account</button>
           </Link>
+          <Link to="/notes">
+            <button>Doctors</button>
+          </Link>
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (

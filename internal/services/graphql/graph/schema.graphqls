@@ -17,6 +17,7 @@ type Doctor {
   doctorId: String!
   doctorName: String!
   specialization: String!
+  experienceYears: Int!
 }
 
 type VisitRecord {

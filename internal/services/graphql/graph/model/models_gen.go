@@ -19,9 +19,10 @@ type AuthPayload struct {
 }
 
 type Doctor struct {
-	DoctorID       string `json:"doctorId"`
-	DoctorName     string `json:"doctorName"`
-	Specialization string `json:"specialization"`
+	DoctorID        string `json:"doctorId"`
+	DoctorName      string `json:"doctorName"`
+	Specialization  string `json:"specialization"`
+	ExperienceYears int    `json:"experienceYears"`
 }
 
 type Mutation struct {

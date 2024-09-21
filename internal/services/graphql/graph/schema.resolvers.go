@@ -190,9 +190,10 @@ func (r *queryResolver) GetDoctors(ctx context.Context) ([]*model.Doctor, error)
 	doctors := make([]*model.Doctor, len(responce.GetDoctors()))
 	for i, doc := range responce.GetDoctors() {
 		doctors[i] = &model.Doctor{
-			DoctorID:       doc.GetDoctorId(),
-			DoctorName:     doc.GetDoctorName(),
-			Specialization: doc.GetSpecialization(),
+			DoctorID:        doc.GetDoctorId(),
+			DoctorName:      doc.GetDoctorName(),
+			Specialization:  doc.GetSpecialization(),
+			ExperienceYears: int(doc.GetExperienceYears()),
 		}
 	}
 

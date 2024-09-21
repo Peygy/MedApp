@@ -3,7 +3,7 @@ module github.com/peygy/medapp/internal/services/graphql
 go 1.23
 
 require (
-	github.com/99designs/gqlgen v0.17.54
+	github.com/99designs/gqlgen v0.17.49
 	github.com/gin-gonic/gin v1.10.0
 	github.com/peygy/medapp/internal/pkg v0.0.0-20240916203235-7b5e31b7d4f7
 	github.com/vektah/gqlparser/v2 v2.5.16
