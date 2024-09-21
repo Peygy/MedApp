@@ -43,7 +43,7 @@ const DoctorsList = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const handleRecordVisit = (doctorName) => {
+  const handleRecordVisit = (doctorName, specialization) => {
     const visitDate = new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
 
     addVisitRecord({
@@ -51,6 +51,7 @@ const DoctorsList = () => {
         input: {
           userId,
           doctorName,
+          specialization,
           visitDate,
         },
       },
@@ -73,7 +74,7 @@ const DoctorsList = () => {
             <p>Имя: {doctor.doctorName}</p>
             <p>Специализация: {doctor.specialization}</p>
             <p>Опыт: {doctor.experienceYears} лет</p>
-            <button onClick={() => handleRecordVisit(doctor.doctorName)}>
+            <button onClick={() => handleRecordVisit(doctor.doctorName, doctor.specialization)}>
               Записаться на прием
             </button>
           </li>

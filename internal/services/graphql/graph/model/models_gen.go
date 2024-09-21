@@ -3,9 +3,10 @@
 package model
 
 type AddVisitRecordInput struct {
-	UserID     string `json:"userId"`
-	DoctorName string `json:"doctorName"`
-	VisitDate  string `json:"visitDate"`
+	UserID         string `json:"userId"`
+	DoctorName     string `json:"doctorName"`
+	Specialization string `json:"specialization"`
+	VisitDate      string `json:"visitDate"`
 }
 
 type AuthData struct {

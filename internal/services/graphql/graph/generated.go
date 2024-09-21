@@ -3735,7 +3735,7 @@ func (ec *executionContext) unmarshalInputAddVisitRecordInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"userId", "doctorName", "visitDate"}
+	fieldsInOrder := [...]string{"userId", "doctorName", "specialization", "visitDate"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3756,6 +3756,13 @@ func (ec *executionContext) unmarshalInputAddVisitRecordInput(ctx context.Contex
 				return it, err
 			}
 			it.DoctorName = data
+		case "specialization":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("specialization"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Specialization = data
 		case "visitDate":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visitDate"))
 			data, err := ec.unmarshalNString2string(ctx, v)

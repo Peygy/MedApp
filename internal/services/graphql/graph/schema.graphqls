@@ -64,5 +64,6 @@ input AuthData {
 input AddVisitRecordInput {
   userId: String!
   doctorName: String!
+  specialization: String!
   visitDate: String!
 }

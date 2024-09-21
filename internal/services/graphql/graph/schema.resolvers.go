@@ -103,9 +103,10 @@ func (r *mutationResolver) AddVisitRecord(ctx context.Context, input model.AddVi
 	noteClient := pbNote.NewVisitServiceClient(r.GrpcServices[noteConnIdx].Conn)
 
 	responce, err := noteClient.AddVisitRecord(ctx, &pbNote.AddVisitRecordRequest{
-		UserId:     input.UserID,
-		DoctorName: input.DoctorName,
-		VisitDate:  input.VisitDate,
+		UserId:         input.UserID,
+		DoctorName:     input.DoctorName,
+		Specialization: input.Specialization,
+		VisitDate:      input.VisitDate,
 	})
 	if err != nil {
 		fmt.Print(err)
