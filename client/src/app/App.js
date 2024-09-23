@@ -4,6 +4,7 @@ import Home from './../home/Home';
 import SignUp from '../signUp/SignUp';
 import SignIn from '../signIn/SignIn';
 import Account from '../account/Account';
+import AccountNotes from '../account_notes/Account_notes';
 import Notes from '../note/note';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/account/notes" element={<AccountNotes />} />
         <Route path="/logout" element={<Account />} />
         <Route path="/notes" element={<Notes />} />
         <Route path="*" element={<Navigate to="/" />} /> {/* Редирект на главную, если путь неверный */}

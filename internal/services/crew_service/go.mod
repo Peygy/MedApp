@@ -3,7 +3,7 @@ module github.com/peygy/medapp/internal/services/crew_service
 go 1.23.0
 
 require (
-	github.com/peygy/medapp/internal/pkg v0.0.0-20240916203235-7b5e31b7d4f7
+	github.com/peygy/medapp/internal/pkg v0.0.0-20240921221036-09e722009f4f
 	go.uber.org/fx v1.22.2
 )
 

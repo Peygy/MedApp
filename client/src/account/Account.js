@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 const GET_USER_INFO_QUERY = gql`
   query GetUserInfo($input: UserAccountData!) {
@@ -107,6 +108,8 @@ function Account() {
 
   return (
     <div>
+      <h2>User Visit Records</h2>
+      <Link to="/account/notes">View Visit Records</Link>
       <h1>Account</h1>
       <p>Username: {username}</p>
       <p>Age: {displayValue(roundToOneDecimal(age))}</p>
