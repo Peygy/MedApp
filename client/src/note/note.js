@@ -44,7 +44,14 @@ const DoctorsList = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   const handleRecordVisit = (doctorName, specialization) => {
-    const visitDate = new Date().toISOString().split('T')[0]; // Текущая дата в формате YYYY-MM-DD
+    let visitDate = new Date();
+    visitDate.setDate(visitDate.getDate() + 3);
+  
+    const formattedVisitDate = visitDate.toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
 
     addVisitRecord({
       variables: {
@@ -52,7 +59,7 @@ const DoctorsList = () => {
           userId,
           doctorName,
           specialization,
-          visitDate,
+          visitDate: formattedVisitDate,
         },
       },
     })
