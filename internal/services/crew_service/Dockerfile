@@ -1,8 +1,11 @@
 FROM golang:alpine AS builder
 
+RUN apk add --no-cache git
+
 WORKDIR /app
 
 ADD go.mod .
+RUN go mod download
 
 COPY . .
 
