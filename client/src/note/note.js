@@ -40,8 +40,8 @@ const DoctorsList = () => {
     return <p>Не удалось получить идентификатор пользователя из cookie.</p>;
   }
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p>Загрузка...</p>;
+  if (error) return <p>Ошибка: {error.message}</p>;
 
   const handleRecordVisit = (doctorName, specialization) => {
     let visitDate = new Date();
@@ -78,7 +78,7 @@ const DoctorsList = () => {
       <ul>
         {data?.getDoctors.map((doctor) => (
           <li key={doctor.doctorId}>
-            <p>Имя: {doctor.doctorName}</p>
+            <p>Фио врача: {doctor.doctorName}</p>
             <p>Специализация: {doctor.specialization}</p>
             <p>Опыт: {doctor.experienceYears} лет</p>
             <button onClick={() => handleRecordVisit(doctor.doctorName, doctor.specialization)}>

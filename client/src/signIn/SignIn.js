@@ -42,7 +42,7 @@ function SignIn() {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Вход в аккаунт</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -57,10 +57,10 @@ function SignIn() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit" disabled={loading}>
-          {loading ? 'Logging In...' : 'Login'}
+          {loading ? 'Вход в аккаунт...' : 'Вход'}
         </button>
       </form>
-      {error && <p>Error: {error.message}</p>}
+      {error && <p>Ошибка: {error.message}</p>}
     </div>
   );
 }

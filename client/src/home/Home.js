@@ -14,24 +14,24 @@ function Home() {
 
   return (
     <div>
-      <h1>Welcome to the App</h1>
+      <h1>Добро пожаловать на MedApp!</h1>
       {userId ? (
         <div>
           <Link to="/account">
-            <button>Account</button>
+            <button>Ваш личный кабинет</button>
           </Link>
           <Link to="/notes">
-            <button>Doctors</button>
+            <button>Запись к врачу</button>
           </Link>
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout}>Выход из аккаунта</button>
         </div>
       ) : (
         <div>
           <Link to="/signup">
-            <button>Sign Up</button>
+            <button>Регистрация аккаунта</button>
           </Link>
           <Link to="/signin">
-            <button>Login</button>
+            <button>Вход в аккаунт</button>
           </Link>
         </div>
       )}

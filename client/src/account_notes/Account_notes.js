@@ -24,22 +24,22 @@ function VisitRecords() {
     },
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p>Загрузка...</p>;
+  if (error) return <p>Ошибка: {error.message}</p>;
 
   return (
     <div>
-      <h1>Visit Records</h1>
+      <h1>Ваши записи к врачам</h1>
       {data.getUserVisitRecords.length === 0 ? (
         <p>No visit records found.</p>
       ) : (
         <table>
           <thead>
             <tr>
-              <th>Record Number</th>
-              <th>Doctor Name</th>
-              <th>Specialization</th>
-              <th>Visit Date</th>
+              <th>Номер записи</th>
+              <th>ФИО врача</th>
+              <th>Специализация врача</th>
+              <th>Дата приема</th>
             </tr>
           </thead>
           <tbody>
@@ -54,7 +54,7 @@ function VisitRecords() {
           </tbody>
         </table>
       )}
-      <Link to="/account">Back to Account</Link>
+      <Link to="/account">Вернуться в личный кабинет</Link>
     </div>
   );
 }

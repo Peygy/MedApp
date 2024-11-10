@@ -89,8 +89,8 @@ function Account() {
     });
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p>Загрузка...</p>;
+  if (error) return <p>Ошибка: {error.message}</p>;
 
   const {
     username,
@@ -108,29 +108,28 @@ function Account() {
 
   return (
     <div>
-      <h2>User Visit Records</h2>
-      <Link to="/account/notes">View Visit Records</Link>
-      <h1>Account</h1>
-      <p>Username: {username}</p>
-      <p>Age: {displayValue(roundToOneDecimal(age))}</p>
-      <p>Height: {displayValue(roundToOneDecimal(height))}</p>
-      <p>Weight: {displayValue(roundToOneDecimal(weight))}</p>
-      <p>Pulse: {displayValue(roundToOneDecimal(pulse))}</p>
-      <p>Pressure: {displayValue(roundToOneDecimal(pressure))}</p>
+      <Link to="/account/notes">Перейти к вашим записям</Link>
+      <h1>Личный кабинет</h1>
+      <p>Имя пользователя: {username}</p>
+      <p>Возраст: {displayValue(roundToOneDecimal(age))}</p>
+      <p>Рост: {displayValue(roundToOneDecimal(height))}</p>
+      <p>Вес: {displayValue(roundToOneDecimal(weight))}</p>
+      <p>Пульс: {displayValue(roundToOneDecimal(pulse))}</p>
+      <p>Давление: {displayValue(roundToOneDecimal(pressure))}</p>
       <p>
-        Daily Water: {weight ? displayValue(roundToOneDecimal(dailyWater), 'Требуется вес') : 'Требуется вес'}
+        Необходимое потребление воды в день: {weight ? displayValue(roundToOneDecimal(dailyWater), 'Требуется вес') : 'Требуется вес'}
       </p>
       <p>
-        Body Mass Index:{' '}
+        Индекс массы тела:{' '}
         {weight && height
           ? displayValue(roundToOneDecimal(bodyMassIndex), 'Требуются вес и рост')
           : 'Требуются вес и рост'}
       </p>
 
-      <h2>Update Health Data</h2>
+      <h2>Обновить персональные медицинские данные</h2>
       <form onSubmit={handleSubmit}>
         <label>
-          Age:
+          Возраст:
           <input
             type="number"
             name="age"
@@ -139,7 +138,7 @@ function Account() {
           />
         </label>
         <label>
-          Height:
+          Рост:
           <input
             type="number"
             name="height"
@@ -149,7 +148,7 @@ function Account() {
           />
         </label>
         <label>
-          Weight:
+          Вес:
           <input
             type="number"
             name="weight"
@@ -159,7 +158,7 @@ function Account() {
           />
         </label>
         <label>
-          Pulse:
+          Пульс:
           <input
             type="number"
             name="pulse"
@@ -168,7 +167,7 @@ function Account() {
           />
         </label>
         <label>
-          Pressure:
+          Давление:
           <input
             type="text"
             name="pressure"
@@ -176,7 +175,7 @@ function Account() {
             onChange={handleChange}
           />
         </label>
-        <button type="submit">Update</button>
+        <button type="submit">Обновить</button>
       </form>
     </div>
   );

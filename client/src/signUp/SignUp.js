@@ -42,7 +42,7 @@ function SignUp() {
 
   return (
     <div>
-      <h1>Sign Up</h1>
+      <h1>Регистрация нового аккаунта</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -57,10 +57,10 @@ function SignUp() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit" disabled={loading}>
-          {loading ? 'Signing Up...' : 'Sign Up'}
+          {loading ? 'Регистрация...' : 'Зарегистрироваться'}
         </button>
       </form>
-      {error && <p>Error: {error.message}</p>}
+      {error && <p>Ошибка: {error.message}</p>}
     </div>
   );
 }
