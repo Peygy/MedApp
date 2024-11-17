@@ -3,11 +3,15 @@ module github.com/peygy/medapp/internal/services/crew_service
 go 1.23.0
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/peygy/medapp/internal/pkg v0.0.0-20240923200850-00768f9c631c
+	github.com/stretchr/testify v1.8.1
 	go.uber.org/fx v1.23.0
 )
 
 require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	go.uber.org/dig v1.18.0 // indirect
 	golang.org/x/net v0.31.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
