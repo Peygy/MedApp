@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 YaBrowser/24.10.0.0 Safari/537.36" version="24.8.3" pages="3">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 YaBrowser/24.10.0.0 Safari/537.36" version="24.8.6" pages="3">
   <diagram name="Page-1" id="b5b7bab2-c9e2-2cf4-8b2a-24fd1a2a6d21">
-    <mxGraphModel dx="2048" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="2571" dy="2235" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -30,7 +30,7 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-24" value="&lt;span style=&quot;font-size: 12px; text-wrap: wrap; background-color: rgb(251, 251, 251);&quot;&gt;GraphQL&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: 12px; text-align: left; text-wrap: wrap; background-color: rgb(251, 251, 251);&quot;&gt;(:4000)&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-8" vertex="1" connectable="0">
           <mxGeometry x="0.002" y="-1" relative="1" as="geometry">
-            <mxPoint x="54" as="offset" />
+            <mxPoint x="44" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-9" value="AuthService&lt;br&gt;(порт&amp;nbsp; :5101)" style="verticalAlign=top;align=left;spacingTop=8;spacingLeft=2;spacingRight=12;shape=cube;size=10;direction=south;fontStyle=4;html=1;whiteSpace=wrap;" parent="1" vertex="1">
@@ -77,7 +77,7 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-23" value="gRPC (proto)&lt;div&gt;&lt;span style=&quot;font-size: 12px; text-wrap: wrap; background-color: rgb(251, 251, 251);&quot;&gt;(:9000)&lt;/span&gt;&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-22" vertex="1" connectable="0">
           <mxGeometry x="0.085" y="2" relative="1" as="geometry">
-            <mxPoint x="42" y="12" as="offset" />
+            <mxPoint x="52" y="2" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-25" value="gRPC Client" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -91,7 +91,7 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-27" value="RabbitMQ (amqp)&lt;br&gt;&lt;span style=&quot;font-size: 12px; text-align: left; text-wrap: wrap; background-color: rgb(251, 251, 251);&quot;&gt;(порт :5672)&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-26" vertex="1" connectable="0">
           <mxGeometry x="0.085" y="2" relative="1" as="geometry">
-            <mxPoint x="53" y="2" as="offset" />
+            <mxPoint x="53" y="13" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-28" value="&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;AuthService_DB&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;PostgreSQL&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;(порт&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&amp;nbsp;:5432&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;)&lt;/span&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -105,7 +105,7 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-30" value="SQL" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-29" vertex="1" connectable="0">
           <mxGeometry x="0.0417" y="3" relative="1" as="geometry">
-            <mxPoint y="-12" as="offset" />
+            <mxPoint x="-8" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-31" value="&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;HealthService&lt;/span&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;_DB&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;PostgreSQL&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;(порт&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&amp;nbsp;:5433&lt;/span&gt;&lt;span style=&quot;text-align: left;&quot;&gt;)&lt;/span&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -119,7 +119,7 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-33" value="SQL" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-32" vertex="1" connectable="0">
           <mxGeometry x="0.0417" y="3" relative="1" as="geometry">
-            <mxPoint y="-12" as="offset" />
+            <mxPoint x="-6" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-34" value="&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;CrewService&lt;/span&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;_DB&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;PostgreSQL&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;(порт :5435)&lt;/span&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -136,7 +136,7 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-36" value="gRPC (proto)&lt;div&gt;&lt;span style=&quot;font-size: 12px; text-wrap: wrap; background-color: rgb(251, 251, 251);&quot;&gt;(:9000)&lt;/span&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-35" vertex="1" connectable="0">
           <mxGeometry x="0.085" y="2" relative="1" as="geometry">
-            <mxPoint x="-58" y="69" as="offset" />
+            <mxPoint x="-58" y="99" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-37" value="&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;NoteService&lt;/span&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;_DB&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;PostgreSQL&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;(порт :5434)&lt;/span&gt;&lt;span style=&quot;text-align: left; text-decoration-line: underline;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="shape=datastore;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -150,7 +150,7 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-39" value="SQL" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-38" vertex="1" connectable="0">
           <mxGeometry x="0.0417" y="3" relative="1" as="geometry">
-            <mxPoint y="-12" as="offset" />
+            <mxPoint x="-12" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-40" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=55;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;" parent="1" source="4kuYVYSUsoIdoiyKr8LV-18" target="4kuYVYSUsoIdoiyKr8LV-34" edge="1">
@@ -161,15 +161,15 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-41" value="SQL" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-40" vertex="1" connectable="0">
           <mxGeometry x="0.0417" y="3" relative="1" as="geometry">
-            <mxPoint y="-12" as="offset" />
+            <mxPoint x="-12" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="4kuYVYSUsoIdoiyKr8LV-42" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=65;entryDy=0;entryPerimeter=0;exitX=0;exitY=0;exitDx=0;exitDy=210;exitPerimeter=0;" parent="1" source="4kuYVYSUsoIdoiyKr8LV-15" target="4kuYVYSUsoIdoiyKr8LV-3" edge="1">
+        <mxCell id="4kuYVYSUsoIdoiyKr8LV-42" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=65;entryDy=0;entryPerimeter=0;exitX=0;exitY=0;exitDx=0;exitDy=105;exitPerimeter=0;" parent="1" source="4kuYVYSUsoIdoiyKr8LV-15" target="4kuYVYSUsoIdoiyKr8LV-3" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="240" y="360" as="sourcePoint" />
             <mxPoint x="240" y="320" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="490" y="280" />
+              <mxPoint x="595" y="280" />
               <mxPoint x="520" y="280" />
               <mxPoint x="520" y="235" />
             </Array>
@@ -177,13 +177,13 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-43" value="gRPC (proto)&lt;div&gt;&lt;span style=&quot;font-size: 12px; text-wrap: wrap; background-color: rgb(251, 251, 251);&quot;&gt;(:9000)&lt;/span&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="4kuYVYSUsoIdoiyKr8LV-42" vertex="1" connectable="0">
           <mxGeometry x="0.085" y="2" relative="1" as="geometry">
-            <mxPoint x="42" y="-20" as="offset" />
+            <mxPoint x="20" y="-20" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="4kuYVYSUsoIdoiyKr8LV-44" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=140;entryDy=10;entryPerimeter=0;exitX=0;exitY=0;exitDx=65;exitDy=220;exitPerimeter=0;" parent="1" source="4kuYVYSUsoIdoiyKr8LV-18" target="4kuYVYSUsoIdoiyKr8LV-3" edge="1">
+        <mxCell id="4kuYVYSUsoIdoiyKr8LV-44" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=65;exitDy=220;exitPerimeter=0;entryX=0;entryY=0;entryDx=140;entryDy=10;entryPerimeter=0;" parent="1" source="4kuYVYSUsoIdoiyKr8LV-18" target="4kuYVYSUsoIdoiyKr8LV-3" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="500" y="360" as="sourcePoint" />
-            <mxPoint x="490" y="310" as="targetPoint" />
+            <mxPoint x="439" y="311" as="targetPoint" />
             <Array as="points">
               <mxPoint x="440" y="585" />
               <mxPoint x="440" y="340" />
@@ -201,6 +201,39 @@
         </mxCell>
         <mxCell id="4kuYVYSUsoIdoiyKr8LV-47" value="RabbitMQ Producer" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="120" y="370" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-1" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="320" width="260" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-2" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="-195" y="330" width="145" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-3" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="-195" y="495" width="145" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-4" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="755" y="320" width="150" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-5" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="755" y="490" width="150" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-6" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="490" width="260" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-7" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="320" width="230" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-8" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="490" width="230" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-11" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="220" y="140" width="260" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-12" value="Docker container" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" vertex="1" parent="1">
+          <mxGeometry x="260" width="230" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="YgeEAtNuTBSRF9uYwJin-13" value="Docker compose - multicontainer" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=120;height=30;" vertex="1" parent="1">
+          <mxGeometry x="-210" y="-10" width="1130" height="670" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
